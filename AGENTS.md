@@ -18,7 +18,12 @@ This repository stores a simple Python-based market data pipeline for JSE symbol
 
 - `ingest_daily_data.py`: latest completed daily candle ingestion
 - `backfill_daily_data.py`: historical daily backfill
+- `calculate_indicators.py`: offline indicator calculation and chart generation
 - `market_data_pipeline.py`: shared parsing, normalization, merge, logging, and CSV write logic
+
+## Available Sub-Agent
+
+- `agents/trading-indicator-analyst.md`: reads `data/indicators/*` outputs and explains SMA/EMA data in plain language for an amateur investor, with forward compatibility for RSI, MACD, volume, and volume spikes
 
 ## Data Expectations
 
