@@ -14,6 +14,7 @@ Small Python scripts for collecting daily JSE market data from Yahoo Finance and
 
 ```text
 .
+├── generate_indicator_report.py
 ├── calculate_indicators.py
 ├── backfill_daily_data.py
 ├── ingest_daily_data.py
@@ -86,6 +87,26 @@ Behavior:
 - Falls back to `close` if `adj_close` is missing
 - Leaves `SMA_50` and `SMA_200` blank until enough history exists
 - Overwrites Part 2 artifacts on each run so they stay aligned with `data/daily/`
+
+## Indicator Report
+
+Builds a polished human-readable report plus a machine-friendly JSON summary from the latest indicator snapshot.
+
+```bash
+python3 generate_indicator_report.py
+```
+
+Outputs:
+
+- `data/analysis/latest_indicator_report.md`
+- `data/analysis/latest_indicator_report.json`
+
+Behavior:
+
+- Reads `data/indicators/latest_snapshot.csv`
+- Produces a basket summary and per-symbol reads in plain language
+- Keeps the JSON shape reusable for future `RSI`, `MACD`, `volume`, and `volume spike` fields
+- Does not place trades or emit buy/sell automation
 
 ## CSV Schema
 

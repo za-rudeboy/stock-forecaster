@@ -1,0 +1,111 @@
+{
+  "generated_at_utc": "2026-03-28T13:27:10Z",
+  "as_of_date": "2026-03-27",
+  "input_files": {
+    "latest_snapshot_csv": "/home/rudy/development/stock-forecaster/data/indicators/latest_snapshot.csv",
+    "report_markdown": "/home/rudy/development/stock-forecaster/data/analysis/latest_indicator_report.md"
+  },
+  "basket_summary": {
+    "counts": {
+      "total_symbols": 5,
+      "above_sma_200": 4,
+      "above_sma_50": 1,
+      "above_ema_20": 0,
+      "constructive_pullbacks": 3,
+      "downtrend_or_damage": 1
+    },
+    "narrative": "4 of 5 symbols remain above the 200 SMA, but only 1 are above the 50 SMA and 0 are above the 20 EMA. That combination usually means the longer-term structure is more resilient than the current short-term mood."
+  },
+  "symbols": [
+    {
+      "symbol": "AGL.JO",
+      "price_basis": "adj_close",
+      "long_term": "constructive",
+      "medium_term": "pullback",
+      "timing": "weak",
+      "overall_state": "constructive_pullback",
+      "story": "AGL.JO still has a supportive longer-term structure, but the stock is in a pullback or repair phase rather than a clean upswing.",
+      "caution": "If the pullback continues and the 200 SMA breaks, the bigger-picture read worsens materially.",
+      "strengthen_next": "Reclaim the 20 EMA first, then the 50 SMA.",
+      "weaken_next": "Stay pinned under the 20 EMA and drift down toward the 200 SMA.",
+      "observed_metrics": {
+        "vs_sma_50_pct": -6.542294488912937,
+        "vs_sma_200_pct": 9.473593488360233,
+        "vs_ema_20_pct": -1.9866684296027337
+      },
+      "optional_indicators": {}
+    },
+    {
+      "symbol": "GFI.JO",
+      "price_basis": "adj_close",
+      "long_term": "constructive",
+      "medium_term": "pullback",
+      "timing": "weak",
+      "overall_state": "constructive_pullback",
+      "story": "GFI.JO still has a supportive longer-term structure, but the stock is in a pullback or repair phase rather than a clean upswing.",
+      "caution": "If the pullback continues and the 200 SMA breaks, the bigger-picture read worsens materially.",
+      "strengthen_next": "Reclaim the 20 EMA first, then the 50 SMA.",
+      "weaken_next": "Stay pinned under the 20 EMA and drift down toward the 200 SMA.",
+      "observed_metrics": {
+        "vs_sma_50_pct": -14.321006711013428,
+        "vs_sma_200_pct": 5.5194757049707555,
+        "vs_ema_20_pct": -6.343389758855844
+      },
+      "optional_indicators": {}
+    },
+    {
+      "symbol": "MTN.JO",
+      "price_basis": "adj_close",
+      "long_term": "constructive",
+      "medium_term": "positive",
+      "timing": "neutral_to_soft",
+      "overall_state": "mixed",
+      "story": "MTN.JO has mixed evidence across the trend layers, so the setup is not decisive yet.",
+      "caution": "Mixed charts can create false starts in both directions.",
+      "strengthen_next": "Let short-term price action start agreeing with the broader trend.",
+      "weaken_next": "Let the weaker trend layer take control of the chart.",
+      "observed_metrics": {
+        "vs_sma_50_pct": 1.6990961009423655,
+        "vs_sma_200_pct": 18.80378145232433,
+        "vs_ema_20_pct": -0.4135957447026217
+      },
+      "optional_indicators": {}
+    },
+    {
+      "symbol": "NPN.JO",
+      "price_basis": "adj_close",
+      "long_term": "weak",
+      "medium_term": "negative",
+      "timing": "weak",
+      "overall_state": "downtrend_or_damage",
+      "story": "NPN.JO is operating below its long-term trend line, so the chart is in repair mode rather than in a healthy trend.",
+      "caution": "A cheap-looking price is not the same thing as a healthy setup.",
+      "strengthen_next": "Get back above the 20 EMA, then the 50 SMA, and eventually reclaim the 200 SMA.",
+      "weaken_next": "Fail every bounce under the 20 EMA or continue printing lower prices under the 50 SMA.",
+      "observed_metrics": {
+        "vs_sma_50_pct": -8.12328384116434,
+        "vs_sma_200_pct": -21.805656007746556,
+        "vs_ema_20_pct": -5.05518739133951
+      },
+      "optional_indicators": {}
+    },
+    {
+      "symbol": "SBK.JO",
+      "price_basis": "adj_close",
+      "long_term": "constructive",
+      "medium_term": "pullback",
+      "timing": "weak",
+      "overall_state": "constructive_pullback",
+      "story": "SBK.JO still has a supportive longer-term structure, but the stock is in a pullback or repair phase rather than a clean upswing.",
+      "caution": "If the pullback continues and the 200 SMA breaks, the bigger-picture read worsens materially.",
+      "strengthen_next": "Reclaim the 20 EMA first, then the 50 SMA.",
+      "weaken_next": "Stay pinned under the 20 EMA and drift down toward the 200 SMA.",
+      "observed_metrics": {
+        "vs_sma_50_pct": -2.6645104104295214,
+        "vs_sma_200_pct": 12.247324792822445,
+        "vs_ema_20_pct": -1.561054391806238
+      },
+      "optional_indicators": {}
+    }
+  ]
+}

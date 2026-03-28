@@ -19,6 +19,7 @@ This repository stores a simple Python-based market data pipeline for JSE symbol
 - `ingest_daily_data.py`: latest completed daily candle ingestion
 - `backfill_daily_data.py`: historical daily backfill
 - `calculate_indicators.py`: offline indicator calculation and chart generation
+- `generate_indicator_report.py`: reusable human-readable and machine-readable indicator interpretation outputs
 - `market_data_pipeline.py`: shared parsing, normalization, merge, logging, and CSV write logic
 
 ## Available Sub-Agent

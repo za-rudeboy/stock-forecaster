@@ -22,6 +22,7 @@ DAILY_DIR = DATA_DIR / "daily"
 LOG_DIR = DATA_DIR / "logs"
 INDICATORS_DIR = DATA_DIR / "indicators"
 INDICATOR_CHARTS_DIR = INDICATORS_DIR / "charts"
+ANALYSIS_DIR = DATA_DIR / "analysis"
 SYMBOLS_FILE = DATA_DIR / "symbols.txt"
 CSV_COLUMNS = ["date", "symbol", "open", "high", "low", "close", "adj_close", "volume"]
 PRICE_FIELDS = ("open", "high", "low", "close", "adj_close")
@@ -59,6 +60,10 @@ def ensure_directories() -> None:
 def ensure_indicator_directories() -> None:
     INDICATORS_DIR.mkdir(parents=True, exist_ok=True)
     INDICATOR_CHARTS_DIR.mkdir(parents=True, exist_ok=True)
+
+
+def ensure_analysis_directories() -> None:
+    ANALYSIS_DIR.mkdir(parents=True, exist_ok=True)
 
 
 def configure_logging(prefix: str) -> Path:
