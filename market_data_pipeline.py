@@ -20,6 +20,8 @@ ROOT_DIR = Path(__file__).resolve().parent
 DATA_DIR = ROOT_DIR / "data"
 DAILY_DIR = DATA_DIR / "daily"
 LOG_DIR = DATA_DIR / "logs"
+INDICATORS_DIR = DATA_DIR / "indicators"
+INDICATOR_CHARTS_DIR = INDICATORS_DIR / "charts"
 SYMBOLS_FILE = DATA_DIR / "symbols.txt"
 CSV_COLUMNS = ["date", "symbol", "open", "high", "low", "close", "adj_close", "volume"]
 PRICE_FIELDS = ("open", "high", "low", "close", "adj_close")
@@ -52,6 +54,11 @@ class NormalizedRow:
 def ensure_directories() -> None:
     DAILY_DIR.mkdir(parents=True, exist_ok=True)
     LOG_DIR.mkdir(parents=True, exist_ok=True)
+
+
+def ensure_indicator_directories() -> None:
+    INDICATORS_DIR.mkdir(parents=True, exist_ok=True)
+    INDICATOR_CHARTS_DIR.mkdir(parents=True, exist_ok=True)
 
 
 def configure_logging(prefix: str) -> Path:

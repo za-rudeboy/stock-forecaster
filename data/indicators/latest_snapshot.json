@@ -1,0 +1,57 @@
+[
+  {
+    "date": "2026-03-27",
+    "symbol": "AGL.JO",
+    "close": 69607.0,
+    "adj_close": 69607.0,
+    "price_used": 69607.0,
+    "price_basis": "adj_close",
+    "sma_50": 74479.67719999999,
+    "sma_200": null,
+    "ema_20": 71017.88620363033
+  },
+  {
+    "date": "2026-03-27",
+    "symbol": "GFI.JO",
+    "close": 71159.0,
+    "adj_close": 71159.0,
+    "price_used": 71159.0,
+    "price_basis": "adj_close",
+    "sma_50": 83053.0328,
+    "sma_200": null,
+    "ema_20": 75978.61840982387
+  },
+  {
+    "date": "2026-03-27",
+    "symbol": "MTN.JO",
+    "close": 19460.0,
+    "adj_close": 19460.0,
+    "price_used": 19460.0,
+    "price_basis": "adj_close",
+    "sma_50": 19134.88,
+    "sma_200": null,
+    "ema_20": 19540.81675341381
+  },
+  {
+    "date": "2026-03-27",
+    "symbol": "NPN.JO",
+    "close": 85832.0,
+    "adj_close": 85832.0,
+    "price_used": 85832.0,
+    "price_basis": "adj_close",
+    "sma_50": 93420.84,
+    "sma_200": null,
+    "ema_20": 90401.99343989014
+  },
+  {
+    "date": "2026-03-27",
+    "symbol": "SBK.JO",
+    "close": 29781.0,
+    "adj_close": 29781.0,
+    "price_used": 29781.0,
+    "price_basis": "adj_close",
+    "sma_50": 30596.24,
+    "sma_200": null,
+    "ema_20": 30253.268565177197
+  }
+]

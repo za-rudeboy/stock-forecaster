@@ -14,12 +14,14 @@ Small Python scripts for collecting daily JSE market data from Yahoo Finance and
 
 ```text
 .
+├── calculate_indicators.py
 ├── backfill_daily_data.py
 ├── ingest_daily_data.py
 ├── market_data_pipeline.py
 ├── requirements.txt
 └── data
     ├── daily/
+    ├── indicators/
     └── symbols.txt
 ```
 
@@ -63,6 +65,28 @@ Behavior:
 - If a daily file exists but a newly added symbol is missing, the missing symbol is merged into that file
 - `--force` rewrites matching daily files from the current fetch
 
+## Indicator Calculation
+
+Computes `SMA_50`, `SMA_200`, and `EMA_20` from stored daily files without refetching market data.
+
+```bash
+python3 calculate_indicators.py
+```
+
+Outputs:
+
+- `data/indicators/indicators_history.csv`
+- `data/indicators/latest_snapshot.csv`
+- `data/indicators/latest_snapshot.json`
+- `data/indicators/charts/<symbol>.png`
+
+Behavior:
+
+- Uses `adj_close` as the primary indicator input price
+- Falls back to `close` if `adj_close` is missing
+- Leaves `SMA_50` and `SMA_200` blank until enough history exists
+- Overwrites Part 2 artifacts on each run so they stay aligned with `data/daily/`
+
 ## CSV Schema
 
 Each daily file contains one row per symbol:
@@ -70,6 +94,13 @@ Each daily file contains one row per symbol:
 ```csv
 date,symbol,open,high,low,close,adj_close,volume
 2026-03-25,NPN.JO,86800.00,91606.00,86800.00,90847.00,90847.00,1965310
+```
+
+Indicator history rows use this schema:
+
+```csv
+date,symbol,close,adj_close,price_used,price_basis,sma_50,sma_200,ema_20
+2026-03-25,NPN.JO,90847.00,90847.00,90847.00,adj_close,83610.42,,86881.67
 ```
 
 ## Notes
