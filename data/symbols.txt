@@ -1,0 +1,6 @@
+# Pilot JSE Top 40 watchlist for Part 1 ingestion testing
+NPN.JO  # Naspers Limited
+SBK.JO  # Standard Bank Group Limited
+MTN.JO  # MTN Group Limited
+AGL.JO  # Anglo American plc
+GFI.JO  # Gold Fields Limited
