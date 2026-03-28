@@ -23,6 +23,7 @@ Small Python scripts for collecting daily JSE market data from Yahoo Finance and
 └── data
     ├── daily/
     ├── indicators/
+    ├── positions.csv
     └── symbols.txt
 ```
 
@@ -39,6 +40,15 @@ Edit `data/symbols.txt` and keep one Yahoo Finance symbol per line. Inline comme
 ```text
 NPN.JO  # Naspers Limited
 SBK.JO  # Standard Bank Group Limited
+```
+
+## Open Positions
+
+Track held names in `data/positions.csv` so reports can separate position-management commentary from fresh entry candidates.
+
+```csv
+symbol,status,opened_on,notes
+SOL.JO,open,,Held from before the recent oil-related spike
 ```
 
 ## Daily Ingestion
@@ -105,6 +115,7 @@ Outputs:
 Behavior:
 
 - Reads `data/indicators/latest_snapshot.csv`
+- Reads `data/positions.csv` when present and marks held symbols as open positions
 - Produces a basket summary, shortlist tables, and per-symbol reads in plain language
 - Uses the first-pass screen rule as a candidate filter:
   `price > SMA_200`, `price > SMA_50`, `RSI_14 > 50`, and fresh `EMA_20` reclaim

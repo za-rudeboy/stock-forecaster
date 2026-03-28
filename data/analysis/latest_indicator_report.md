@@ -8,6 +8,7 @@
 29 of 45 symbols remain above the 200 SMA, 13 are above the 50 SMA, and 13 have RSI above 50. 1 have just reclaimed the 20 EMA, while 1 pass the full first-pass screen. That gives you a tighter shortlist than using moving averages alone.
 
 - Above `SMA_200`: `29/45`
+- Open positions tracked: `1`
 - Above `SMA_50`: `13/45`
 - Above `EMA_20`: `12/45`
 - `RSI_14 > 50`: `13/45`
@@ -23,9 +24,16 @@
 ## How To Use This Report
 
 - Start with the shortlist tables below; they are the screening layer for a larger watchlist.
+- Read the open-positions section first when you already hold names; that is position management, not fresh screening.
 - Treat the first-pass screen as a candidate filter, not as a buy signal.
 - Use the detailed reads only for the highest-priority names, not every symbol in the universe.
 - Use the JSON report when another agent needs the same view in structured form.
+
+## Open Positions To Manage
+
+| Symbol | Priority | Score | RSI 14 | EMA reclaim | Volume | Screen pass |
+| --- | --- | ---: | ---: | --- | --- | --- |
+| SOL.JO | review_now | 12.25 | 76.6 | no | normal | no |
 
 ## Top Review Candidates
 
@@ -62,6 +70,8 @@
 ### SOL.JO
 
 - Review priority: `review_now`
+- Position status: `open`
+- Opened on: `n/a`
 - Review score: `12.25`
 - Long-term trend: `constructive`
 - Medium trend: `positive`
@@ -80,10 +90,13 @@
 - Caution: Short-term strength can still fail if momentum rolls over quickly.
 - Strengthens if: Hold above the 20 EMA and continue separating above the 50 SMA.
 - Weakens if: Slip back under the 20 EMA and then lose the 50 SMA.
+- Position notes: Held from before the recent oil-related spike
 
 ### BHG.JO
 
 - Review priority: `review_now`
+- Position status: `not_held`
+- Opened on: `n/a`
 - Review score: `12.06`
 - Long-term trend: `constructive`
 - Medium trend: `positive`
@@ -102,10 +115,13 @@
 - Caution: A fresh reclaim is an early timing event, so it needs follow-through rather than a one-day burst.
 - Strengthens if: Stay above the 20 EMA, keep RSI above 50, and expand above the 50 SMA.
 - Weakens if: Lose the 20 EMA quickly or let RSI slip back below 50.
+- Position notes: n/a
 
 ### SUI.JO
 
 - Review priority: `review_now`
+- Position status: `not_held`
+- Opened on: `n/a`
 - Review score: `10.66`
 - Long-term trend: `constructive`
 - Medium trend: `improving`
@@ -124,10 +140,13 @@
 - Caution: Short-term strength can still fail if momentum rolls over quickly.
 - Strengthens if: Hold above the 20 EMA and continue separating above the 50 SMA.
 - Weakens if: Slip back under the 20 EMA and then lose the 50 SMA.
+- Position notes: n/a
 
 ### GLN.JO
 
 - Review priority: `review_now`
+- Position status: `not_held`
+- Opened on: `n/a`
 - Review score: `10.52`
 - Long-term trend: `constructive`
 - Medium trend: `positive`
@@ -146,10 +165,13 @@
 - Caution: Short-term strength can still fail if momentum rolls over quickly.
 - Strengthens if: Hold above the 20 EMA and continue separating above the 50 SMA.
 - Weakens if: Slip back under the 20 EMA and then lose the 50 SMA.
+- Position notes: n/a
 
 ### EXX.JO
 
 - Review priority: `review_now`
+- Position status: `not_held`
+- Opened on: `n/a`
 - Review score: `10.24`
 - Long-term trend: `constructive`
 - Medium trend: `positive`
@@ -168,6 +190,7 @@
 - Caution: Short-term strength can still fail if momentum rolls over quickly.
 - Strengthens if: Hold above the 20 EMA and continue separating above the 50 SMA.
 - Weakens if: Slip back under the 20 EMA and then lose the 50 SMA.
+- Position notes: n/a
 
 ## Notes
 

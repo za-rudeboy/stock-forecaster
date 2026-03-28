@@ -24,6 +24,7 @@ INDICATORS_DIR = DATA_DIR / "indicators"
 INDICATOR_CHARTS_DIR = INDICATORS_DIR / "charts"
 ANALYSIS_DIR = DATA_DIR / "analysis"
 SYMBOLS_FILE = DATA_DIR / "symbols.txt"
+POSITIONS_FILE = DATA_DIR / "positions.csv"
 CSV_COLUMNS = ["date", "symbol", "open", "high", "low", "close", "adj_close", "volume"]
 PRICE_FIELDS = ("open", "high", "low", "close", "adj_close")
 
@@ -50,6 +51,14 @@ class NormalizedRow:
             "adj_close": f"{self.adj_close:.2f}",
             "volume": str(self.volume),
         }
+
+
+@dataclass(frozen=True)
+class PositionRow:
+    symbol: str
+    status: str
+    opened_on: str | None = None
+    notes: str | None = None
 
 
 def ensure_directories() -> None:
@@ -113,6 +122,38 @@ def read_symbols(path: Path) -> list[str]:
         raise ValueError(f"No symbols found in {path}")
 
     return symbols
+
+
+def read_positions(path: Path) -> list[PositionRow]:
+    if not path.exists():
+        return []
+
+    with path.open(encoding="utf-8", newline="") as handle:
+        reader = csv.DictReader(handle)
+        if reader.fieldnames is None:
+            raise ValueError(f"Positions file has no header: {path}")
+
+        required = {"symbol", "status"}
+        missing = required.difference(reader.fieldnames)
+        if missing:
+            raise ValueError(f"Positions file missing required columns: {sorted(missing)}")
+
+        positions: list[PositionRow] = []
+        for raw in reader:
+            symbol = (raw.get("symbol") or "").split("#", 1)[0].strip()
+            status = (raw.get("status") or "").split("#", 1)[0].strip().lower()
+            if not symbol or not status:
+                continue
+            positions.append(
+                PositionRow(
+                    symbol=symbol,
+                    status=status,
+                    opened_on=(raw.get("opened_on") or "").strip() or None,
+                    notes=(raw.get("notes") or "").strip() or None,
+                )
+            )
+
+    return positions
 
 
 def normalize_float(value: object, field_name: str, symbol: str) -> float:
