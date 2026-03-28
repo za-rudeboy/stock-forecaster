@@ -1,6 +1,51 @@
-# Pilot JSE Top 40 watchlist for Part 1 ingestion testing
+# Expanded JSE watchlist
+# Core large-cap names plus a smaller liquid mid-cap sleeve
+
+# Large-cap core
+PRX.JO  # Prosus N.V.
 NPN.JO  # Naspers Limited
-SBK.JO  # Standard Bank Group Limited
-MTN.JO  # MTN Group Limited
+BHG.JO  # BHP Group Limited
 AGL.JO  # Anglo American plc
+GLN.JO  # Glencore plc
+VAL.JO  # Valterra Platinum Limited
+BVT.JO  # Bidvest Group Limited
+FSR.JO  # FirstRand Limited
+CPI.JO  # Capitec Bank Holdings Limited
+MTN.JO  # MTN Group Limited
+NED.JO  # Nedbank Group Limited
+SBK.JO  # Standard Bank Group Limited
+ABG.JO  # Absa Group Limited
+SLM.JO  # Sanlam Limited
+REM.JO  # Remgro Limited
+DSY.JO  # Discovery Limited
+OMU.JO  # Old Mutual Limited
+SOL.JO  # Sasol Limited
+S32.JO  # South32 Limited
+KIO.JO  # Kumba Iron Ore Limited
+EXX.JO  # Exxaro Resources Limited
+IMP.JO  # Impala Platinum Holdings Limited
 GFI.JO  # Gold Fields Limited
+CFR.JO  # Compagnie Financiere Richemont SA
+ANH.JO  # Anheuser-Busch InBev SA/NV
+BTI.JO  # British American Tobacco p.l.c.
+CLS.JO  # Clicks Group Limited
+VOD.JO  # Vodacom Group Limited
+WHL.JO  # Woolworths Holdings Limited
+SPP.JO  # The SPAR Group Limited
+SHP.JO  # Shoprite Holdings Limited
+TBS.JO  # Tiger Brands Limited
+TRU.JO  # Truworths International Limited
+MRP.JO  # Mr Price Group Limited
+OUT.JO  # OUTsurance Group Limited
+
+# Mid-cap sleeve
+PAN.JO  # Pan African Resources PLC
+KST.JO  # PSG Financial Services Limited
+ADH.JO  # ADvTECH Limited
+MTH.JO  # Motus Holdings Limited
+MTM.JO  # Momentum Group Limited
+LHC.JO  # Life Healthcare Group Holdings Limited
+SAP.JO  # Sappi Limited
+APN.JO  # Aspen Pharmacare Holdings Limited
+AVI.JO  # AVI Limited
+SUI.JO  # Sun International Limited
