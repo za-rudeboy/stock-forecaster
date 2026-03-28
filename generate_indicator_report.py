@@ -28,6 +28,8 @@ REPORT_MD_OUTPUT = ANALYSIS_DIR / "latest_indicator_report.md"
 REPORT_JSON_OUTPUT = ANALYSIS_DIR / "latest_indicator_report.json"
 REQUIRED_COLUMNS = {"date", "symbol", "close", "adj_close", "price_used", "price_basis", "sma_50", "sma_200", "ema_20"}
 OPTIONAL_COLUMNS = ["rsi", "macd", "macd_signal", "macd_histogram", "volume", "volume_avg_20", "volume_spike"]
+DETAILED_SYMBOL_LIMIT = 5
+SHORTLIST_LIMIT = 5
 
 
 @dataclass(frozen=True)
@@ -47,6 +49,8 @@ class SymbolReport:
     caution: str
     strengthen_next: str
     weaken_next: str
+    review_priority: str
+    review_score: float
     observed_metrics: dict[str, float | None]
     optional_indicators: dict[str, float | str | None]
 
@@ -132,6 +136,47 @@ def build_story(symbol: str, long_term: str, medium_term: str, timing: str) -> t
     return overall_state, story, caution, strengthen_next, weaken_next
 
 
+def score_symbol(long_term: str, medium_term: str, timing: str, observed_metrics: dict[str, float | None]) -> tuple[float, str]:
+    score = 0.0
+
+    if long_term == "constructive":
+        score += 3.0
+    elif long_term == "weak":
+        score -= 3.0
+
+    medium_weights = {
+        "positive": 2.0,
+        "improving": 1.5,
+        "pullback": 0.5,
+        "negative": -1.5,
+    }
+    score += medium_weights.get(medium_term, 0.0)
+
+    timing_weights = {
+        "strong": 1.5,
+        "firm": 1.0,
+        "neutral_to_soft": 0.25,
+        "weak": -1.0,
+    }
+    score += timing_weights.get(timing, 0.0)
+
+    for metric_name in ("vs_sma_200_pct", "vs_sma_50_pct", "vs_ema_20_pct"):
+        metric_value = observed_metrics.get(metric_name)
+        if metric_value is not None:
+            score += max(min(metric_value / 10.0, 1.5), -1.5)
+
+    if long_term == "constructive" and medium_term in {"positive", "improving"}:
+        priority = "review_now"
+    elif long_term == "constructive" and medium_term == "pullback":
+        priority = "watch_pullback"
+    elif long_term == "weak":
+        priority = "avoid_for_now"
+    else:
+        priority = "mixed_watch"
+
+    return score, priority
+
+
 def load_snapshot(path: Path, symbols: set[str]) -> list[dict[str, str]]:
     if not path.exists():
         raise FileNotFoundError(f"Snapshot input not found: {path}")
@@ -162,6 +207,12 @@ def build_symbol_report(row: dict[str, str]) -> SymbolReport:
     medium_term = classify_medium_term(price_used, sma_50, sma_200)
     timing = classify_timing(price_used, ema_20)
     overall_state, story, caution, strengthen_next, weaken_next = build_story(row["symbol"], long_term, medium_term, timing)
+    observed_metrics = {
+        "vs_sma_50_pct": percent_gap(price_used, sma_50),
+        "vs_sma_200_pct": percent_gap(price_used, sma_200),
+        "vs_ema_20_pct": percent_gap(price_used, ema_20),
+    }
+    review_score, review_priority = score_symbol(long_term, medium_term, timing, observed_metrics)
 
     optional_indicators: dict[str, float | str | None] = {}
     for column in OPTIONAL_COLUMNS:
@@ -188,11 +239,9 @@ def build_symbol_report(row: dict[str, str]) -> SymbolReport:
         caution=caution,
         strengthen_next=strengthen_next,
         weaken_next=weaken_next,
-        observed_metrics={
-            "vs_sma_50_pct": percent_gap(price_used, sma_50),
-            "vs_sma_200_pct": percent_gap(price_used, sma_200),
-            "vs_ema_20_pct": percent_gap(price_used, ema_20),
-        },
+        review_priority=review_priority,
+        review_score=review_score,
+        observed_metrics=observed_metrics,
         optional_indicators=optional_indicators,
     )
 
@@ -221,10 +270,61 @@ def format_pct(value: float | None) -> str:
     return f"{value:.1f}%"
 
 
+def shortlist_reports(reports: list[SymbolReport]) -> list[SymbolReport]:
+    return sorted(
+        reports,
+        key=lambda report: (
+            -report.review_score,
+            report.symbol,
+        ),
+    )[:SHORTLIST_LIMIT]
+
+
+def grouped_reports(reports: list[SymbolReport]) -> dict[str, list[SymbolReport]]:
+    groups = {
+        "review_now": [],
+        "watch_pullback": [],
+        "mixed_watch": [],
+        "avoid_for_now": [],
+    }
+    for report in sorted(reports, key=lambda item: (-item.review_score, item.symbol)):
+        groups.setdefault(report.review_priority, []).append(report)
+    return groups
+
+
+def shortlist_table_lines(title: str, reports: list[SymbolReport]) -> list[str]:
+    lines = [f"## {title}", ""]
+    if not reports:
+        lines.extend(["No symbols in this bucket right now.", ""])
+        return lines
+
+    lines.extend(
+        [
+            "| Symbol | Priority | Score | vs 200 SMA | vs 50 SMA | vs 20 EMA |",
+            "| --- | --- | ---: | ---: | ---: | ---: |",
+        ]
+    )
+    for report in reports:
+        lines.append(
+            "| "
+            f"{report.symbol} | "
+            f"{report.review_priority} | "
+            f"{report.review_score:.2f} | "
+            f"{format_pct(report.observed_metrics['vs_sma_200_pct'])} | "
+            f"{format_pct(report.observed_metrics['vs_sma_50_pct'])} | "
+            f"{format_pct(report.observed_metrics['vs_ema_20_pct'])} |"
+        )
+    lines.append("")
+    return lines
+
+
 def write_markdown_report(reports: list[SymbolReport], counts: dict[str, int], summary_text: str) -> None:
     as_of_date = reports[0].as_of_date
-    strongest = next((report.symbol for report in reports if report.overall_state == "trend_strength"), None)
-    weakest = next((report.symbol for report in reports if report.overall_state == "downtrend_or_damage"), None)
+    ranked_reports = sorted(reports, key=lambda report: (-report.review_score, report.symbol))
+    weakest_reports = sorted(reports, key=lambda report: (report.review_score, report.symbol))
+    top_shortlist = shortlist_reports(reports)
+    buckets = grouped_reports(reports)
+    detailed_reports = ranked_reports[: min(DETAILED_SYMBOL_LIMIT, len(ranked_reports))]
 
     lines = [
         "# Indicator Report",
@@ -239,20 +339,39 @@ def write_markdown_report(reports: list[SymbolReport], counts: dict[str, int], s
         f"- Above `SMA_200`: `{counts['above_sma_200']}/{counts['total_symbols']}`",
         f"- Above `SMA_50`: `{counts['above_sma_50']}/{counts['total_symbols']}`",
         f"- Above `EMA_20`: `{counts['above_ema_20']}/{counts['total_symbols']}`",
+        f"- Review-now candidates: `{len(buckets['review_now'])}`",
+        f"- Pullbacks worth watching: `{len(buckets['watch_pullback'])}`",
+        f"- Avoid-for-now names: `{len(buckets['avoid_for_now'])}`",
     ]
 
-    if strongest:
-        lines.append(f"- Strongest setup right now: `{strongest}`")
-    if weakest:
-        lines.append(f"- Weakest setup right now: `{weakest}`")
+    if top_shortlist:
+        lines.append(f"- Highest-priority name right now: `{top_shortlist[0].symbol}`")
+    if weakest_reports:
+        lines.append(f"- Weakest setup right now: `{weakest_reports[0].symbol}`")
 
-    lines.extend(["", "## Symbol Reads", ""])
+    lines.extend(["", "## How To Use This Report", ""])
+    lines.extend(
+        [
+            "- Start with the shortlist tables below; they are the screening layer for a larger watchlist.",
+            "- Use the detailed reads only for the highest-priority names, not every symbol in the universe.",
+            "- Use the JSON report when another agent needs the same view in structured form.",
+            "",
+        ]
+    )
 
-    for report in reports:
+    lines.extend(shortlist_table_lines("Top Review Candidates", top_shortlist))
+    lines.extend(shortlist_table_lines("Constructive Pullbacks To Watch", buckets["watch_pullback"][:SHORTLIST_LIMIT]))
+    lines.extend(shortlist_table_lines("Avoid For Now", buckets["avoid_for_now"][:SHORTLIST_LIMIT]))
+
+    lines.extend(["## Detailed Reads", ""])
+
+    for report in detailed_reports:
         lines.extend(
             [
                 f"### {report.symbol}",
                 "",
+                f"- Review priority: `{report.review_priority}`",
+                f"- Review score: `{report.review_score:.2f}`",
                 f"- Long-term trend: `{report.long_term}`",
                 f"- Medium trend: `{report.medium_term}`",
                 f"- Timing: `{report.timing}`",
@@ -273,6 +392,7 @@ def write_markdown_report(reports: list[SymbolReport], counts: dict[str, int], s
             "",
             "- Direct observations come from the latest indicator snapshot and derived percentage gaps to the moving averages.",
             "- Narrative language is an interpretation layer, not a prediction or personalized financial advice.",
+            "- The markdown report is intentionally shortlist-first so it stays readable when the watchlist grows.",
             "- Future indicators such as RSI, MACD, volume, and volume spikes can be appended to the same report structure without changing the top-level sections.",
             "",
         ]
@@ -282,6 +402,8 @@ def write_markdown_report(reports: list[SymbolReport], counts: dict[str, int], s
 
 
 def write_json_report(reports: list[SymbolReport], counts: dict[str, int], summary_text: str) -> None:
+    ranked_reports = sorted(reports, key=lambda report: (-report.review_score, report.symbol))
+    buckets = grouped_reports(reports)
     payload = {
         "generated_at_utc": datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "as_of_date": reports[0].as_of_date,
@@ -293,10 +415,17 @@ def write_json_report(reports: list[SymbolReport], counts: dict[str, int], summa
             "counts": counts,
             "narrative": summary_text,
         },
+        "screening": {
+            "top_review_candidates": [report.symbol for report in ranked_reports[:SHORTLIST_LIMIT]],
+            "watch_pullback": [report.symbol for report in buckets["watch_pullback"][:SHORTLIST_LIMIT]],
+            "avoid_for_now": [report.symbol for report in buckets["avoid_for_now"][:SHORTLIST_LIMIT]],
+        },
         "symbols": [
             {
                 "symbol": report.symbol,
                 "price_basis": report.price_basis,
+                "review_priority": report.review_priority,
+                "review_score": report.review_score,
                 "long_term": report.long_term,
                 "medium_term": report.medium_term,
                 "timing": report.timing,
