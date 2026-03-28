@@ -8,7 +8,14 @@
     "price_basis": "adj_close",
     "sma_50": 74479.67719999999,
     "sma_200": 63583.3703,
-    "ema_20": 71017.8858573178
+    "ema_20": 71017.8858573178,
+    "volume": 466465.0,
+    "rsi_14": 45.334528644807975,
+    "volume_avg_20": 1606177.9,
+    "volume_spike_ratio": 0.2904192617766687,
+    "volume_spike": "normal",
+    "ema_20_reclaim": false,
+    "screen_rule_pass": false
   },
   {
     "date": "2026-03-27",
@@ -19,7 +26,14 @@
     "price_basis": "adj_close",
     "sma_50": 83053.0328,
     "sma_200": 67436.8388,
-    "ema_20": 75978.6161501607
+    "ema_20": 75978.6161501607,
+    "volume": 1923826.0,
+    "rsi_14": 39.977160278595406,
+    "volume_avg_20": 3226914.85,
+    "volume_spike_ratio": 0.5961812100495927,
+    "volume_spike": "normal",
+    "ema_20_reclaim": false,
+    "screen_rule_pass": false
   },
   {
     "date": "2026-03-27",
@@ -30,7 +44,14 @@
     "price_basis": "adj_close",
     "sma_50": 19134.88,
     "sma_200": 16379.95,
-    "ema_20": 19540.816991411262
+    "ema_20": 19540.816991411262,
+    "volume": 4837495.0,
+    "rsi_14": 50.104700937303214,
+    "volume_avg_20": 7070745.8,
+    "volume_spike_ratio": 0.6841562597258128,
+    "volume_spike": "normal",
+    "ema_20_reclaim": false,
+    "screen_rule_pass": false
   },
   {
     "date": "2026-03-27",
@@ -41,7 +62,14 @@
     "price_basis": "adj_close",
     "sma_50": 93420.84,
     "sma_200": 109767.53129999999,
-    "ema_20": 90401.99304126481
+    "ema_20": 90401.99304126481,
+    "volume": 1678372.0,
+    "rsi_14": 39.58500857506164,
+    "volume_avg_20": 2579185.75,
+    "volume_spike_ratio": 0.650737156096648,
+    "volume_spike": "normal",
+    "ema_20_reclaim": false,
+    "screen_rule_pass": false
   },
   {
     "date": "2026-03-27",
@@ -52,6 +80,13 @@
     "price_basis": "adj_close",
     "sma_50": 30596.24,
     "sma_200": 26531.585099999997,
-    "ema_20": 30253.268351084447
+    "ema_20": 30253.268351084447,
+    "volume": 3270170.0,
+    "rsi_14": 44.498222288040594,
+    "volume_avg_20": 4948312.9,
+    "volume_spike_ratio": 0.6608656457436229,
+    "volume_spike": "normal",
+    "ema_20_reclaim": false,
+    "screen_rule_pass": false
   }
 ]

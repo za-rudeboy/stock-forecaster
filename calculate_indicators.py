@@ -29,7 +29,24 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 
 
-HISTORY_COLUMNS = ["date", "symbol", "close", "adj_close", "price_used", "price_basis", "sma_50", "sma_200", "ema_20"]
+HISTORY_COLUMNS = [
+    "date",
+    "symbol",
+    "close",
+    "adj_close",
+    "price_used",
+    "price_basis",
+    "sma_50",
+    "sma_200",
+    "ema_20",
+    "volume",
+    "rsi_14",
+    "volume_avg_20",
+    "volume_spike_ratio",
+    "volume_spike",
+    "ema_20_reclaim",
+    "screen_rule_pass",
+]
 HISTORY_OUTPUT = INDICATORS_DIR / "indicators_history.csv"
 SNAPSHOT_CSV_OUTPUT = INDICATORS_DIR / "latest_snapshot.csv"
 SNAPSHOT_JSON_OUTPUT = INDICATORS_DIR / "latest_snapshot.json"
@@ -51,6 +68,18 @@ def format_optional_number(value: object) -> str:
     return f"{float(value):.2f}"
 
 
+def format_optional_bool(value: object) -> str:
+    if value is None or pd.isna(value):
+        return ""
+    return "true" if bool(value) else "false"
+
+
+def format_optional_text(value: object) -> str:
+    if value is None or pd.isna(value):
+        return ""
+    return str(value)
+
+
 def read_daily_history(daily_dir: Path, symbols: set[str]) -> pd.DataFrame:
     rows: list[dict[str, object]] = []
     daily_files = sorted(daily_dir.glob("*.csv"))
@@ -70,6 +99,7 @@ def read_daily_history(daily_dir: Path, symbols: set[str]) -> pd.DataFrame:
                         "symbol": symbol,
                         "close": clean_numeric(raw_row["close"]),
                         "adj_close": clean_numeric(raw_row["adj_close"]),
+                        "volume": clean_numeric(raw_row["volume"]),
                     }
                 )
 
@@ -88,12 +118,65 @@ def compute_indicators(history: pd.DataFrame) -> pd.DataFrame:
     history["price_used"] = history["adj_close"].where(history["adj_close"].notna(), history["close"])
     history["price_basis"] = history["adj_close"].apply(lambda value: "adj_close" if pd.notna(value) else "close")
 
-    by_symbol = history.groupby("symbol", group_keys=False)
+    by_symbol = history.groupby("symbol", group_keys=False, sort=False)
     history["sma_50"] = by_symbol["price_used"].transform(lambda series: series.rolling(window=50, min_periods=50).mean())
     history["sma_200"] = by_symbol["price_used"].transform(lambda series: series.rolling(window=200, min_periods=200).mean())
     history["ema_20"] = by_symbol["price_used"].transform(lambda series: series.ewm(span=20, adjust=False, min_periods=20).mean())
+    history["rsi_14"] = by_symbol["price_used"].transform(compute_rsi_14)
+    history["volume_avg_20"] = by_symbol["volume"].transform(lambda series: series.rolling(window=20, min_periods=20).mean())
+    history["volume_spike_ratio"] = history["volume"] / history["volume_avg_20"]
+    history.loc[history["volume_avg_20"].isna(), "volume_spike_ratio"] = pd.NA
+    history["volume_spike"] = history["volume_spike_ratio"].apply(classify_volume_spike)
+    history["ema_20_reclaim"] = compute_ema_reclaim(history)
+
+    has_screen_inputs = (
+        history["sma_50"].notna()
+        & history["sma_200"].notna()
+        & history["rsi_14"].notna()
+        & history["ema_20_reclaim"].notna()
+    )
+    screen_condition = (
+        (history["price_used"] > history["sma_200"])
+        & (history["price_used"] > history["sma_50"])
+        & (history["rsi_14"] > 50.0)
+        & (history["ema_20_reclaim"] == True)
+    )
+    history["screen_rule_pass"] = pd.Series(pd.NA, index=history.index, dtype="boolean")
+    history.loc[has_screen_inputs, "screen_rule_pass"] = screen_condition.loc[has_screen_inputs].astype("boolean")
 
     return history
+
+
+def compute_rsi_14(series: pd.Series) -> pd.Series:
+    delta = series.diff()
+    gains = delta.clip(lower=0)
+    losses = -delta.clip(upper=0)
+    average_gain = gains.ewm(alpha=1 / 14, adjust=False, min_periods=14).mean()
+    average_loss = losses.ewm(alpha=1 / 14, adjust=False, min_periods=14).mean()
+    rs = average_gain / average_loss
+    rsi = 100.0 - (100.0 / (1.0 + rs))
+    rsi = rsi.where(average_loss != 0, 100.0)
+    rsi = rsi.where(average_gain != 0, 0.0)
+    no_movement = (average_gain == 0) & (average_loss == 0)
+    return rsi.where(~no_movement, 50.0)
+
+
+def classify_volume_spike(value: object) -> str | None:
+    if value is None or pd.isna(value):
+        return None
+    return "spike" if float(value) >= 1.5 else "normal"
+
+
+def compute_ema_reclaim(history: pd.DataFrame) -> pd.Series:
+    prior_price = history.groupby("symbol", sort=False)["price_used"].shift(1)
+    prior_ema = history.groupby("symbol", sort=False)["ema_20"].shift(1)
+    above_ema = history["price_used"] > history["ema_20"]
+    prior_below_ema = prior_price < prior_ema
+    has_context = history["ema_20"].notna() & prior_ema.notna()
+    reclaim = prior_below_ema & above_ema
+    result = pd.Series(pd.NA, index=history.index, dtype="boolean")
+    result.loc[has_context] = reclaim.loc[has_context].astype("boolean")
+    return result
 
 
 def write_history_csv(history: pd.DataFrame, output_path: Path) -> None:
@@ -116,6 +199,13 @@ def write_history_csv(history: pd.DataFrame, output_path: Path) -> None:
                     "sma_50": format_optional_number(row["sma_50"]),
                     "sma_200": format_optional_number(row["sma_200"]),
                     "ema_20": format_optional_number(row["ema_20"]),
+                    "volume": format_optional_number(row["volume"]),
+                    "rsi_14": format_optional_number(row["rsi_14"]),
+                    "volume_avg_20": format_optional_number(row["volume_avg_20"]),
+                    "volume_spike_ratio": format_optional_number(row["volume_spike_ratio"]),
+                    "volume_spike": format_optional_text(row["volume_spike"]),
+                    "ema_20_reclaim": format_optional_bool(row["ema_20_reclaim"]),
+                    "screen_rule_pass": format_optional_bool(row["screen_rule_pass"]),
                 }
             )
 
@@ -140,6 +230,13 @@ def write_latest_snapshot(history: pd.DataFrame) -> None:
                     "sma_50": format_optional_number(row["sma_50"]),
                     "sma_200": format_optional_number(row["sma_200"]),
                     "ema_20": format_optional_number(row["ema_20"]),
+                    "volume": format_optional_number(row["volume"]),
+                    "rsi_14": format_optional_number(row["rsi_14"]),
+                    "volume_avg_20": format_optional_number(row["volume_avg_20"]),
+                    "volume_spike_ratio": format_optional_number(row["volume_spike_ratio"]),
+                    "volume_spike": format_optional_text(row["volume_spike"]),
+                    "ema_20_reclaim": format_optional_bool(row["ema_20_reclaim"]),
+                    "screen_rule_pass": format_optional_bool(row["screen_rule_pass"]),
                 }
             )
 
@@ -156,6 +253,13 @@ def write_latest_snapshot(history: pd.DataFrame) -> None:
                 "sma_50": None if pd.isna(row["sma_50"]) else float(row["sma_50"]),
                 "sma_200": None if pd.isna(row["sma_200"]) else float(row["sma_200"]),
                 "ema_20": None if pd.isna(row["ema_20"]) else float(row["ema_20"]),
+                "volume": None if pd.isna(row["volume"]) else float(row["volume"]),
+                "rsi_14": None if pd.isna(row["rsi_14"]) else float(row["rsi_14"]),
+                "volume_avg_20": None if pd.isna(row["volume_avg_20"]) else float(row["volume_avg_20"]),
+                "volume_spike_ratio": None if pd.isna(row["volume_spike_ratio"]) else float(row["volume_spike_ratio"]),
+                "volume_spike": None if pd.isna(row["volume_spike"]) else str(row["volume_spike"]),
+                "ema_20_reclaim": None if pd.isna(row["ema_20_reclaim"]) else bool(row["ema_20_reclaim"]),
+                "screen_rule_pass": None if pd.isna(row["screen_rule_pass"]) else bool(row["screen_rule_pass"]),
             }
         )
 

@@ -16,11 +16,20 @@ Core inputs:
 - `data/indicators/latest_snapshot.json`
 - `data/indicators/charts/*.png`
 
+Current indicator inputs:
+- `SMA_200`
+- `SMA_50`
+- `EMA_20`
+- `RSI_14`
+- `volume`
+- `volume_avg_20`
+- `volume_spike_ratio`
+- `volume_spike`
+- `ema_20_reclaim`
+- `screen_rule_pass`
+
 Future-compatible inputs:
-- RSI
 - MACD line, signal line, histogram
-- Volume
-- Volume spike flags or rolling-volume context
 
 Operating rules:
 - Use the repo outputs as the primary source of truth.
@@ -37,10 +46,11 @@ Interpretation framework:
   Use price versus `SMA_50` and `SMA_50` versus `SMA_200` to judge whether the trend is improving, weakening, or conflicting.
 - Timing:
   Use price versus `EMA_20` to judge whether the stock is acting strong or weak right now within its broader trend.
+  Treat `ema_20_reclaim=true` as a fresh timing event, not just generic strength.
 - Momentum:
-  When RSI exists, use it to describe strength or stretch, not as a standalone buy/sell trigger.
+  Use `RSI_14` to describe whether momentum is weak, neutral, constructive, or stretched. Do not use it as a standalone buy/sell trigger.
 - Confirmation:
-  When volume and volume spikes exist, use them to judge whether a move looks supported or suspicious.
+  Use `volume`, `volume_avg_20`, `volume_spike_ratio`, and `volume_spike` to judge whether a move looks supported or suspicious.
 - MACD:
   Use MACD as a momentum-confirmation layer after trend direction is already established from the moving averages.
 
@@ -48,10 +58,12 @@ How to combine indicators without contradiction:
 - Start with `SMA_200` to define the environment.
 - Use `SMA_50` to judge medium-term direction inside that environment.
 - Use `EMA_20` to talk about current timing and short-term pressure.
+- Use a fresh `EMA_20` reclaim to highlight early timing improvement.
 - Use RSI and MACD only as supporting momentum evidence.
 - Use volume to confirm whether the move has conviction.
 - If signals conflict, say so plainly and explain which layer has priority:
   long-term trend first, medium trend second, timing third, momentum/volume confirmation last.
+- Treat `screen_rule_pass=true` as a shortlist flag for closer review, not a trade command.
 
 Preferred output structure:
 1. Basket summary
