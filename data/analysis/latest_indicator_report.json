@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-03-28T13:27:10Z",
+  "generated_at_utc": "2026-03-28T13:56:01Z",
   "as_of_date": "2026-03-27",
   "input_files": {
     "latest_snapshot_csv": "/home/rudy/development/stock-forecaster/data/indicators/latest_snapshot.csv",
@@ -16,10 +16,29 @@
     },
     "narrative": "4 of 5 symbols remain above the 200 SMA, but only 1 are above the 50 SMA and 0 are above the 20 EMA. That combination usually means the longer-term structure is more resilient than the current short-term mood."
   },
+  "screening": {
+    "top_review_candidates": [
+      "MTN.JO",
+      "SBK.JO",
+      "AGL.JO",
+      "GFI.JO",
+      "NPN.JO"
+    ],
+    "watch_pullback": [
+      "SBK.JO",
+      "AGL.JO",
+      "GFI.JO"
+    ],
+    "avoid_for_now": [
+      "NPN.JO"
+    ]
+  },
   "symbols": [
     {
       "symbol": "AGL.JO",
       "price_basis": "adj_close",
+      "review_priority": "watch_pullback",
+      "review_score": 2.5944630569844565,
       "long_term": "constructive",
       "medium_term": "pullback",
       "timing": "weak",
@@ -38,6 +57,8 @@
     {
       "symbol": "GFI.JO",
       "price_basis": "adj_close",
+      "review_priority": "watch_pullback",
+      "review_score": 0.9855079235101483,
       "long_term": "constructive",
       "medium_term": "pullback",
       "timing": "weak",
@@ -56,6 +77,8 @@
     {
       "symbol": "MTN.JO",
       "price_basis": "adj_close",
+      "review_priority": "review_now",
+      "review_score": 6.878550035623975,
       "long_term": "constructive",
       "medium_term": "positive",
       "timing": "neutral_to_soft",
@@ -74,6 +97,8 @@
     {
       "symbol": "NPN.JO",
       "price_basis": "adj_close",
+      "review_priority": "avoid_for_now",
+      "review_score": -8.317847123250385,
       "long_term": "weak",
       "medium_term": "negative",
       "timing": "weak",
@@ -92,6 +117,8 @@
     {
       "symbol": "SBK.JO",
       "price_basis": "adj_close",
+      "review_priority": "watch_pullback",
+      "review_score": 3.3021759990586688,
       "long_term": "constructive",
       "medium_term": "pullback",
       "timing": "weak",
