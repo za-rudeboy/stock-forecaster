@@ -22,6 +22,7 @@ Small Python scripts for collecting daily JSE market data from Yahoo Finance and
 ├── requirements.txt
 └── data
     ├── daily/
+    ├── focus_symbols.txt
     ├── indicators/
     ├── positions.csv
     └── symbols.txt
@@ -49,6 +50,14 @@ Track held names in `data/positions.csv` so reports can separate position-manage
 ```csv
 symbol,status,opened_on,notes
 SOL.JO,open,,Held from before the recent oil-related spike
+```
+
+## Focus Symbols
+
+Track names you want to keep visible in the report even when they are not in the top shortlist.
+
+```text
+BHG.JO  # Recheck the fresh EMA20 reclaim follow-through over the next few sessions
 ```
 
 ## Daily Ingestion
@@ -116,6 +125,7 @@ Behavior:
 
 - Reads `data/indicators/latest_snapshot.csv`
 - Reads `data/positions.csv` when present and marks held symbols as open positions
+- Reads `data/focus_symbols.txt` when present and adds a dedicated focus-symbols section
 - Produces a basket summary, shortlist tables, and per-symbol reads in plain language
 - Uses the first-pass screen rule as a candidate filter:
   `price > SMA_200`, `price > SMA_50`, `RSI_14 > 50`, and fresh `EMA_20` reclaim

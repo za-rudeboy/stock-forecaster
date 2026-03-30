@@ -25,6 +25,7 @@ INDICATOR_CHARTS_DIR = INDICATORS_DIR / "charts"
 ANALYSIS_DIR = DATA_DIR / "analysis"
 SYMBOLS_FILE = DATA_DIR / "symbols.txt"
 POSITIONS_FILE = DATA_DIR / "positions.csv"
+FOCUS_SYMBOLS_FILE = DATA_DIR / "focus_symbols.txt"
 CSV_COLUMNS = ["date", "symbol", "open", "high", "low", "close", "adj_close", "volume"]
 PRICE_FIELDS = ("open", "high", "low", "close", "adj_close")
 

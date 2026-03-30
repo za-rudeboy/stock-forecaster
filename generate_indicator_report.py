@@ -13,6 +13,7 @@ from pathlib import Path
 
 from market_data_pipeline import (
     ANALYSIS_DIR,
+    FOCUS_SYMBOLS_FILE,
     INDICATORS_DIR,
     POSITIONS_FILE,
     SYMBOLS_FILE,
@@ -82,6 +83,7 @@ class SymbolReport:
     position_status: str | None
     opened_on: str | None
     notes: str | None
+    is_focus_symbol: bool
     observed_metrics: dict[str, float | None]
     optional_indicators: dict[str, float | str | None]
 
@@ -316,7 +318,11 @@ def load_snapshot(path: Path, symbols: set[str]) -> list[dict[str, str]]:
     return rows
 
 
-def build_symbol_report(row: dict[str, str], positions_by_symbol: dict[str, dict[str, str | None]]) -> SymbolReport:
+def build_symbol_report(
+    row: dict[str, str],
+    positions_by_symbol: dict[str, dict[str, str | None]],
+    focus_symbols: set[str],
+) -> SymbolReport:
     price_used = parse_optional_float(row["price_used"])
     if price_used is None:
         raise ValueError(f"{row['symbol']}: missing price_used in latest snapshot")
@@ -387,6 +393,7 @@ def build_symbol_report(row: dict[str, str], positions_by_symbol: dict[str, dict
         position_status=position.get("status"),
         opened_on=position.get("opened_on"),
         notes=position.get("notes"),
+        is_focus_symbol=row["symbol"] in focus_symbols,
         observed_metrics=observed_metrics,
         optional_indicators=optional_indicators,
     )
@@ -396,6 +403,7 @@ def basket_summary(reports: list[SymbolReport]) -> tuple[dict[str, int], str]:
     counts = {
         "total_symbols": len(reports),
         "open_positions": sum(1 for report in reports if report.position_status == "open"),
+        "focus_symbols": sum(1 for report in reports if report.is_focus_symbol),
         "above_sma_200": sum(1 for report in reports if report.sma_200 is not None and report.price_used >= report.sma_200),
         "above_sma_50": sum(1 for report in reports if report.sma_50 is not None and report.price_used >= report.sma_50),
         "above_ema_20": sum(1 for report in reports if report.ema_20 is not None and report.price_used >= report.ema_20),
@@ -435,6 +443,13 @@ def shortlist_reports(reports: list[SymbolReport]) -> list[SymbolReport]:
 def open_position_reports(reports: list[SymbolReport]) -> list[SymbolReport]:
     return sorted(
         (report for report in reports if report.position_status == "open"),
+        key=lambda report: (-report.review_score, report.symbol),
+    )
+
+
+def focus_symbol_reports(reports: list[SymbolReport]) -> list[SymbolReport]:
+    return sorted(
+        (report for report in reports if report.is_focus_symbol),
         key=lambda report: (-report.review_score, report.symbol),
     )
 
@@ -484,6 +499,7 @@ def write_markdown_report(reports: list[SymbolReport], counts: dict[str, int], s
     weakest_reports = sorted(reports, key=lambda report: (report.review_score, report.symbol))
     top_shortlist = shortlist_reports(reports)
     open_positions = open_position_reports(reports)
+    focus_symbols = focus_symbol_reports(reports)
     buckets = grouped_reports(reports)
     detailed_reports = ranked_reports[: min(DETAILED_SYMBOL_LIMIT, len(ranked_reports))]
 
@@ -499,6 +515,7 @@ def write_markdown_report(reports: list[SymbolReport], counts: dict[str, int], s
         "",
         f"- Above `SMA_200`: `{counts['above_sma_200']}/{counts['total_symbols']}`",
         f"- Open positions tracked: `{counts['open_positions']}`",
+        f"- Focus symbols tracked: `{counts['focus_symbols']}`",
         f"- Above `SMA_50`: `{counts['above_sma_50']}/{counts['total_symbols']}`",
         f"- Above `EMA_20`: `{counts['above_ema_20']}/{counts['total_symbols']}`",
         f"- `RSI_14 > 50`: `{counts['rsi_above_50']}/{counts['total_symbols']}`",
@@ -520,6 +537,7 @@ def write_markdown_report(reports: list[SymbolReport], counts: dict[str, int], s
         [
             "- Start with the shortlist tables below; they are the screening layer for a larger watchlist.",
             "- Read the open-positions section first when you already hold names; that is position management, not fresh screening.",
+            "- Use the focus-symbols section to keep names under active review visible even when they are not in the top-5 shortlist.",
             "- Treat the first-pass screen as a candidate filter, not as a buy signal.",
             "- Use the detailed reads only for the highest-priority names, not every symbol in the universe.",
             "- Use the JSON report when another agent needs the same view in structured form.",
@@ -528,6 +546,7 @@ def write_markdown_report(reports: list[SymbolReport], counts: dict[str, int], s
     )
 
     lines.extend(shortlist_table_lines("Open Positions To Manage", open_positions))
+    lines.extend(shortlist_table_lines("Focus Symbols To Recheck", focus_symbols))
     lines.extend(shortlist_table_lines("Top Review Candidates", top_shortlist))
     lines.extend(shortlist_table_lines("Constructive Pullbacks To Watch", buckets["watch_pullback"][:SHORTLIST_LIMIT]))
     lines.extend(shortlist_table_lines("Avoid For Now", buckets["avoid_for_now"][:SHORTLIST_LIMIT]))
@@ -541,6 +560,7 @@ def write_markdown_report(reports: list[SymbolReport], counts: dict[str, int], s
                 "",
                 f"- Review priority: `{report.review_priority}`",
                 f"- Position status: `{report.position_status or 'not_held'}`",
+                f"- Focus symbol: `{'yes' if report.is_focus_symbol else 'no'}`",
                 f"- Opened on: `{report.opened_on or 'n/a'}`",
                 f"- Review score: `{report.review_score:.2f}`",
                 f"- Long-term trend: `{report.long_term}`",
@@ -590,6 +610,7 @@ def write_json_report(reports: list[SymbolReport], counts: dict[str, int], summa
             "latest_snapshot_csv": str(SNAPSHOT_INPUT),
             "report_markdown": str(REPORT_MD_OUTPUT),
             "positions_csv": str(POSITIONS_FILE),
+            "focus_symbols_txt": str(FOCUS_SYMBOLS_FILE),
         },
         "basket_summary": {
             "counts": counts,
@@ -597,6 +618,7 @@ def write_json_report(reports: list[SymbolReport], counts: dict[str, int], summa
         },
         "screening": {
             "open_positions": [report.symbol for report in open_position_reports(reports)],
+            "focus_symbols": [report.symbol for report in focus_symbol_reports(reports)],
             "top_review_candidates": [report.symbol for report in ranked_reports[:SHORTLIST_LIMIT]],
             "watch_pullback": [report.symbol for report in buckets["watch_pullback"][:SHORTLIST_LIMIT]],
             "avoid_for_now": [report.symbol for report in buckets["avoid_for_now"][:SHORTLIST_LIMIT]],
@@ -611,6 +633,7 @@ def write_json_report(reports: list[SymbolReport], counts: dict[str, int], summa
                 "position_status": report.position_status,
                 "opened_on": report.opened_on,
                 "notes": report.notes,
+                "is_focus_symbol": report.is_focus_symbol,
                 "long_term": report.long_term,
                 "medium_term": report.medium_term,
                 "timing": report.timing,
@@ -649,6 +672,7 @@ def run() -> int:
 
     try:
         symbols = set(read_symbols(SYMBOLS_FILE))
+        focus_symbols = set(read_symbols(FOCUS_SYMBOLS_FILE)) if FOCUS_SYMBOLS_FILE.exists() else set()
         positions = read_positions(POSITIONS_FILE)
         positions_by_symbol = {
             position.symbol: {
@@ -660,7 +684,10 @@ def run() -> int:
             if position.status == "open"
         }
         rows = load_snapshot(SNAPSHOT_INPUT, symbols)
-        reports = sorted((build_symbol_report(row, positions_by_symbol) for row in rows), key=lambda report: report.symbol)
+        reports = sorted(
+            (build_symbol_report(row, positions_by_symbol, focus_symbols) for row in rows),
+            key=lambda report: report.symbol,
+        )
         counts, summary_text = basket_summary(reports)
         write_markdown_report(reports, counts, summary_text)
         write_json_report(reports, counts, summary_text)
