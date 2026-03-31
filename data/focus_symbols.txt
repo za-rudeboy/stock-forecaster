@@ -1,1 +1,2 @@
-BHG.JO  # Recheck the fresh EMA20 reclaim follow-through over the next few sessions
+BHG.JO  # Recheck the fresh EMA20 reclaim follow-through over the next few sessions. Re-evaluate on 01-04-2026
+MTN.JO  # Give it until 03-04-2026 and re-evaluate
