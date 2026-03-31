@@ -8,8 +8,8 @@
 29 of 45 symbols remain above the 200 SMA, 14 are above the 50 SMA, and 16 have RSI above 50. 8 have just reclaimed the 20 EMA, while 3 pass the full first-pass screen. That gives you a tighter shortlist than using moving averages alone.
 
 - Above `SMA_200`: `29/45`
-- Open positions tracked: `0`
-- Focus symbols tracked: `1`
+- Open positions tracked: `1`
+- Focus symbols tracked: `2`
 - Above `SMA_50`: `14/45`
 - Above `EMA_20`: `18/45`
 - `RSI_14 > 50`: `16/45`
@@ -33,12 +33,15 @@
 
 ## Open Positions To Manage
 
-No symbols in this bucket right now.
+| Symbol | Priority | Score | RSI 14 | EMA reclaim | Volume | Screen pass |
+| --- | --- | ---: | ---: | --- | --- | --- |
+| ABG.JO | watch_pullback | 5.29 | 48.3 | yes | normal | no |
 
 ## Focus Symbols To Recheck
 
 | Symbol | Priority | Score | RSI 14 | EMA reclaim | Volume | Screen pass |
 | --- | --- | ---: | ---: | --- | --- | --- |
+| MTN.JO | review_now | 11.94 | 51.1 | yes | normal | yes |
 | BHG.JO | review_now | 9.31 | 55.6 | no | normal | no |
 
 ## Top Review Candidates
@@ -129,7 +132,7 @@ No symbols in this bucket right now.
 
 - Review priority: `review_now`
 - Position status: `not_held`
-- Focus symbol: `no`
+- Focus symbol: `yes`
 - Opened on: `n/a`
 - Review score: `11.94`
 - Long-term trend: `constructive`

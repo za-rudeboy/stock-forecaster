@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-03-31T17:32:58Z",
+  "generated_at_utc": "2026-03-31T17:47:47Z",
   "as_of_date": "2026-03-31",
   "input_files": {
     "latest_snapshot_csv": "/home/rudy/development/stock-forecaster/data/indicators/latest_snapshot.csv",
@@ -10,8 +10,8 @@
   "basket_summary": {
     "counts": {
       "total_symbols": 45,
-      "open_positions": 0,
-      "focus_symbols": 1,
+      "open_positions": 1,
+      "focus_symbols": 2,
       "above_sma_200": 29,
       "above_sma_50": 14,
       "above_ema_20": 18,
@@ -25,8 +25,11 @@
     "narrative": "29 of 45 symbols remain above the 200 SMA, 14 are above the 50 SMA, and 16 have RSI above 50. 8 have just reclaimed the 20 EMA, while 3 pass the full first-pass screen. That gives you a tighter shortlist than using moving averages alone."
   },
   "screening": {
-    "open_positions": [],
+    "open_positions": [
+      "ABG.JO"
+    ],
     "focus_symbols": [
+      "MTN.JO",
       "BHG.JO"
     ],
     "top_review_candidates": [
@@ -62,9 +65,9 @@
       "price_basis": "adj_close",
       "review_priority": "watch_pullback",
       "review_score": 5.2894438117293525,
-      "position_status": null,
+      "position_status": "open",
       "opened_on": null,
-      "notes": null,
+      "notes": "Current open holdings have an average purchase price of 16392",
       "is_focus_symbol": false,
       "long_term": "constructive",
       "medium_term": "pullback",
@@ -857,7 +860,7 @@
       "position_status": null,
       "opened_on": null,
       "notes": null,
-      "is_focus_symbol": false,
+      "is_focus_symbol": true,
       "long_term": "constructive",
       "medium_term": "positive",
       "timing": "firm",
