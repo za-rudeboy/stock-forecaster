@@ -1,2 +1,2 @@
 BHG.JO  # Watch for constructive confirmation: volume >= 0.8x 20d avg, continued closes above EMA20 59437.15, and ideally a break above 62209.00
-MTN.JO  # Give it until 03-04-2026 and re-evaluate
+SUI.JO  # Strong but extended: watch for volume >= 0.8x 20d avg, continued closes above EMA20 4423.98, and ideally a break above 4844.00

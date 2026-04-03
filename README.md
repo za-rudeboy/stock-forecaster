@@ -116,6 +116,12 @@ Builds a polished human-readable report plus a machine-friendly JSON summary fro
 python3 generate_indicator_report.py
 ```
 
+For a single refresh command that recomputes indicators, rebuilds the report, and prints the current open-position and focus-symbol summaries to the terminal:
+
+```bash
+python3 refresh_analysis.py
+```
+
 Outputs:
 
 - `data/analysis/latest_indicator_report.md`
