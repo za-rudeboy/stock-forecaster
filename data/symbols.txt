@@ -30,7 +30,6 @@ ANH.JO  # Anheuser-Busch InBev SA/NV
 BTI.JO  # British American Tobacco p.l.c.
 CLS.JO  # Clicks Group Limited
 VOD.JO  # Vodacom Group Limited
-WHL.JO  # Woolworths Holdings Limited
 SPP.JO  # The SPAR Group Limited
 SHP.JO  # Shoprite Holdings Limited
 TBS.JO  # Tiger Brands Limited

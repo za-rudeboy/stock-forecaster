@@ -1,25 +1,25 @@
 # Indicator Report
 
-- As of: `2026-03-31`
-- Symbols covered: `ABG.JO, ADH.JO, AGL.JO, ANH.JO, APN.JO, AVI.JO, BHG.JO, BTI.JO, BVT.JO, CFR.JO, CLS.JO, CPI.JO, DSY.JO, EXX.JO, FSR.JO, GFI.JO, GLN.JO, IMP.JO, KIO.JO, KST.JO, LHC.JO, MRP.JO, MTH.JO, MTM.JO, MTN.JO, NED.JO, NPN.JO, OMU.JO, OUT.JO, PAN.JO, PRX.JO, REM.JO, S32.JO, SAP.JO, SBK.JO, SHP.JO, SLM.JO, SOL.JO, SPP.JO, SUI.JO, TBS.JO, TRU.JO, VAL.JO, VOD.JO, WHL.JO`
+- As of: `2026-04-01`
+- Symbols covered: `ABG.JO, ADH.JO, AGL.JO, ANH.JO, APN.JO, AVI.JO, BHG.JO, BTI.JO, BVT.JO, CFR.JO, CLS.JO, CPI.JO, DSY.JO, EXX.JO, FSR.JO, GFI.JO, GLN.JO, IMP.JO, KIO.JO, KST.JO, LHC.JO, MRP.JO, MTH.JO, MTM.JO, MTN.JO, NED.JO, NPN.JO, OMU.JO, OUT.JO, PAN.JO, PRX.JO, REM.JO, S32.JO, SAP.JO, SBK.JO, SHP.JO, SLM.JO, SOL.JO, SPP.JO, SUI.JO, TBS.JO, TRU.JO, VAL.JO, VOD.JO`
 
 ## Basket Summary
 
-29 of 45 symbols remain above the 200 SMA, 14 are above the 50 SMA, and 16 have RSI above 50. 8 have just reclaimed the 20 EMA, while 3 pass the full first-pass screen. That gives you a tighter shortlist than using moving averages alone.
+30 of 44 symbols remain above the 200 SMA, 17 are above the 50 SMA, and 20 have RSI above 50. 9 have just reclaimed the 20 EMA, while 1 pass the full first-pass screen. That gives you a tighter shortlist than using moving averages alone.
 
-- Above `SMA_200`: `29/45`
-- Open positions tracked: `1`
+- Above `SMA_200`: `30/44`
+- Open positions tracked: `2`
 - Focus symbols tracked: `2`
-- Above `SMA_50`: `14/45`
-- Above `EMA_20`: `18/45`
-- `RSI_14 > 50`: `16/45`
-- Fresh `EMA_20` reclaims: `8`
-- Screen-rule passes: `3`
-- Volume spikes: `1`
-- Review-now candidates: `13`
-- Pullbacks worth watching: `16`
-- Avoid-for-now names: `16`
-- Highest-priority name right now: `SOL.JO`
+- Above `SMA_50`: `17/44`
+- Above `EMA_20`: `25/44`
+- `RSI_14 > 50`: `20/44`
+- Fresh `EMA_20` reclaims: `9`
+- Screen-rule passes: `1`
+- Volume spikes: `0`
+- Review-now candidates: `16`
+- Pullbacks worth watching: `14`
+- Avoid-for-now names: `14`
+- Highest-priority name right now: `PAN.JO`
 - Weakest setup right now: `SPP.JO`
 
 ## How To Use This Report
@@ -35,146 +35,73 @@
 
 | Symbol | Priority | Score | RSI 14 | EMA reclaim | Volume | Screen pass |
 | --- | --- | ---: | ---: | --- | --- | --- |
-| ABG.JO | watch_pullback | 5.29 | 48.3 | yes | normal | no |
+| ADH.JO | review_now | 10.46 | 68.4 | no | normal | no |
+| ABG.JO | watch_pullback | 4.43 | 47.5 | no | normal | no |
 
 ## Focus Symbols To Recheck
 
 | Symbol | Priority | Score | RSI 14 | EMA reclaim | Volume | Screen pass |
 | --- | --- | ---: | ---: | --- | --- | --- |
-| MTN.JO | review_now | 11.94 | 51.1 | yes | normal | yes |
-| BHG.JO | review_now | 9.31 | 55.6 | no | normal | no |
+| BHG.JO | review_now | 9.69 | 59.5 | no | normal | no |
+| MTN.JO | review_now | 9.04 | 52.4 | no | normal | no |
 
 ## Top Review Candidates
 
 | Symbol | Priority | Score | RSI 14 | EMA reclaim | Volume | Screen pass |
 | --- | --- | ---: | ---: | --- | --- | --- |
-| SOL.JO | review_now | 12.25 | 78.8 | no | normal | no |
-| REM.JO | review_now | 11.98 | 57.0 | yes | normal | yes |
-| MTN.JO | review_now | 11.94 | 51.1 | yes | normal | yes |
-| APN.JO | review_now | 11.81 | 52.7 | yes | normal | yes |
-| EXX.JO | review_now | 11.55 | 69.3 | no | normal | no |
+| PAN.JO | review_now | 13.43 | 58.4 | yes | normal | yes |
+| EXX.JO | review_now | 11.38 | 67.9 | no | normal | no |
+| GLN.JO | review_now | 11.37 | 66.1 | no | normal | no |
+| SOL.JO | review_now | 11.15 | 60.4 | no | normal | no |
+| SUI.JO | review_now | 11.15 | 69.2 | no | normal | no |
 
 ## Constructive Pullbacks To Watch
 
 | Symbol | Priority | Score | RSI 14 | EMA reclaim | Volume | Screen pass |
 | --- | --- | ---: | ---: | --- | --- | --- |
-| SBK.JO | watch_pullback | 7.20 | 51.5 | yes | normal | no |
-| AGL.JO | watch_pullback | 6.84 | 50.9 | yes | normal | no |
-| KST.JO | watch_pullback | 5.96 | 50.7 | yes | normal | no |
-| ABG.JO | watch_pullback | 5.29 | 48.3 | yes | normal | no |
-| PAN.JO | watch_pullback | 5.11 | 47.6 | no | normal | no |
+| GFI.JO | watch_pullback | 8.30 | 55.8 | no | normal | no |
+| NED.JO | watch_pullback | 6.62 | 50.4 | yes | normal | no |
+| MTM.JO | watch_pullback | 5.34 | 50.1 | yes | normal | no |
+| VAL.JO | watch_pullback | 5.17 | 48.5 | yes | normal | no |
+| CPI.JO | watch_pullback | 5.14 | 47.9 | yes | normal | no |
 
 ## Avoid For Now
 
 | Symbol | Priority | Score | RSI 14 | EMA reclaim | Volume | Screen pass |
 | --- | --- | ---: | ---: | --- | --- | --- |
-| LHC.JO | avoid_for_now | 1.12 | 56.4 | no | normal | no |
-| KIO.JO | avoid_for_now | -3.72 | 44.8 | no | normal | no |
-| WHL.JO | avoid_for_now | -4.48 | 40.7 | no | normal | no |
-| BVT.JO | avoid_for_now | -4.53 | 41.1 | no | normal | no |
-| TBS.JO | avoid_for_now | -6.05 | 45.4 | no | normal | no |
+| LHC.JO | avoid_for_now | 1.22 | 61.3 | no | normal | no |
+| KIO.JO | avoid_for_now | -1.79 | 49.5 | yes | normal | no |
+| BVT.JO | avoid_for_now | -2.69 | 42.1 | no | normal | no |
+| SLM.JO | avoid_for_now | -2.79 | 46.7 | no | normal | no |
+| CFR.JO | avoid_for_now | -4.83 | 48.8 | yes | normal | no |
 
 ## Detailed Reads
 
-### SOL.JO
+### PAN.JO
 
 - Review priority: `review_now`
 - Position status: `not_held`
 - Focus symbol: `no`
 - Opened on: `n/a`
-- Review score: `12.25`
-- Long-term trend: `constructive`
-- Medium trend: `positive`
-- Timing: `strong`
-- Momentum: `strong`
-- Confirmation: `light`
-- `RSI_14`: `78.82`
-- Volume vs `20d avg`: `0.52x`
-- Volume flag: `normal`
-- Fresh `EMA_20` reclaim: `no`
-- Screen-rule pass: `no`
-- Price vs `SMA_200`: `94.0%`
-- Price vs `SMA_50`: `49.7%`
-- Price vs `EMA_20`: `15.2%`
-- Story: SOL.JO is aligned across the bigger trend and the nearer-term trend, with momentum on its side. Volume confirmation is light.
-- Caution: Short-term strength can still fail if momentum rolls over quickly.
-- Strengthens if: Hold above the 20 EMA and continue separating above the 50 SMA.
-- Weakens if: Slip back under the 20 EMA and then lose the 50 SMA.
-- Position notes: n/a
-
-### REM.JO
-
-- Review priority: `review_now`
-- Position status: `not_held`
-- Focus symbol: `no`
-- Opened on: `n/a`
-- Review score: `11.98`
+- Review score: `13.43`
 - Long-term trend: `constructive`
 - Medium trend: `positive`
 - Timing: `strong`
 - Momentum: `constructive`
+- MACD: `bullish`
 - Confirmation: `adequate`
-- `RSI_14`: `57.03`
-- Volume vs `20d avg`: `1.45x`
+- `RSI_14`: `58.44`
+- `MACD`: `-55.65`
+- `MACD signal`: `-63.79`
+- `MACD histogram`: `8.14`
+- Volume vs `20d avg`: `0.91x`
 - Volume flag: `normal`
 - Fresh `EMA_20` reclaim: `yes`
 - Screen-rule pass: `yes`
-- Price vs `SMA_200`: `7.7%`
-- Price vs `SMA_50`: `2.1%`
-- Price vs `EMA_20`: `2.5%`
-- Story: REM.JO passes the current first-pass screen: it is above both long- and medium-term trend lines, RSI is on the constructive side of 50, and price has just reclaimed the 20 EMA.
-- Caution: A fresh reclaim is an early timing event, so it needs follow-through rather than a one-day burst.
-- Strengthens if: Stay above the 20 EMA, keep RSI above 50, and expand above the 50 SMA.
-- Weakens if: Lose the 20 EMA quickly or let RSI slip back below 50.
-- Position notes: n/a
-
-### MTN.JO
-
-- Review priority: `review_now`
-- Position status: `not_held`
-- Focus symbol: `yes`
-- Opened on: `n/a`
-- Review score: `11.94`
-- Long-term trend: `constructive`
-- Medium trend: `positive`
-- Timing: `firm`
-- Momentum: `constructive`
-- Confirmation: `adequate`
-- `RSI_14`: `51.09`
-- Volume vs `20d avg`: `1.26x`
-- Volume flag: `normal`
-- Fresh `EMA_20` reclaim: `yes`
-- Screen-rule pass: `yes`
-- Price vs `SMA_200`: `18.9%`
-- Price vs `SMA_50`: `1.8%`
-- Price vs `EMA_20`: `0.1%`
-- Story: MTN.JO passes the current first-pass screen: it is above both long- and medium-term trend lines, RSI is on the constructive side of 50, and price has just reclaimed the 20 EMA.
-- Caution: A fresh reclaim is an early timing event, so it needs follow-through rather than a one-day burst.
-- Strengthens if: Stay above the 20 EMA, keep RSI above 50, and expand above the 50 SMA.
-- Weakens if: Lose the 20 EMA quickly or let RSI slip back below 50.
-- Position notes: n/a
-
-### APN.JO
-
-- Review priority: `review_now`
-- Position status: `not_held`
-- Focus symbol: `no`
-- Opened on: `n/a`
-- Review score: `11.81`
-- Long-term trend: `constructive`
-- Medium trend: `positive`
-- Timing: `firm`
-- Momentum: `constructive`
-- Confirmation: `light`
-- `RSI_14`: `52.74`
-- Volume vs `20d avg`: `0.65x`
-- Volume flag: `normal`
-- Fresh `EMA_20` reclaim: `yes`
-- Screen-rule pass: `yes`
-- Price vs `SMA_200`: `18.8%`
-- Price vs `SMA_50`: `5.2%`
-- Price vs `EMA_20`: `0.4%`
-- Story: APN.JO passes the current first-pass screen: it is above both long- and medium-term trend lines, RSI is on the constructive side of 50, and price has just reclaimed the 20 EMA.
+- Price vs `SMA_200`: `52.9%`
+- Price vs `SMA_50`: `4.9%`
+- Price vs `EMA_20`: `6.9%`
+- Story: PAN.JO passes the current first-pass screen: it is above both long- and medium-term trend lines, RSI is on the constructive side of 50, and price has just reclaimed the 20 EMA. MACD is confirming improving momentum.
 - Caution: A fresh reclaim is an early timing event, so it needs follow-through rather than a one-day burst.
 - Strengthens if: Stay above the 20 EMA, keep RSI above 50, and expand above the 50 SMA.
 - Weakens if: Lose the 20 EMA quickly or let RSI slip back below 50.
@@ -186,21 +113,115 @@
 - Position status: `not_held`
 - Focus symbol: `no`
 - Opened on: `n/a`
-- Review score: `11.55`
+- Review score: `11.38`
 - Long-term trend: `constructive`
 - Medium trend: `positive`
 - Timing: `strong`
 - Momentum: `strong`
+- MACD: `bullish`
 - Confirmation: `adequate`
-- `RSI_14`: `69.31`
-- Volume vs `20d avg`: `0.90x`
+- `RSI_14`: `67.89`
+- `MACD`: `648.92`
+- `MACD signal`: `597.48`
+- `MACD histogram`: `51.44`
+- Volume vs `20d avg`: `0.91x`
 - Volume flag: `normal`
 - Fresh `EMA_20` reclaim: `no`
 - Screen-rule pass: `no`
-- Price vs `SMA_200`: `24.5%`
-- Price vs `SMA_50`: `12.3%`
-- Price vs `EMA_20`: `5.8%`
-- Story: EXX.JO is aligned across the bigger trend and the nearer-term trend, with momentum on its side. Volume confirmation is adequate.
+- Price vs `SMA_200`: `23.7%`
+- Price vs `SMA_50`: `11.4%`
+- Price vs `EMA_20`: `4.8%`
+- Story: EXX.JO is aligned across the bigger trend and the nearer-term trend, with momentum on its side. Volume confirmation is adequate. MACD is confirming improving momentum.
+- Caution: Short-term strength can still fail if momentum rolls over quickly.
+- Strengthens if: Hold above the 20 EMA and continue separating above the 50 SMA.
+- Weakens if: Slip back under the 20 EMA and then lose the 50 SMA.
+- Position notes: n/a
+
+### GLN.JO
+
+- Review priority: `review_now`
+- Position status: `not_held`
+- Focus symbol: `no`
+- Opened on: `n/a`
+- Review score: `11.37`
+- Long-term trend: `constructive`
+- Medium trend: `positive`
+- Timing: `strong`
+- Momentum: `strong`
+- MACD: `bullish`
+- Confirmation: `adequate`
+- `RSI_14`: `66.14`
+- `MACD`: `373.99`
+- `MACD signal`: `301.90`
+- `MACD histogram`: `72.09`
+- Volume vs `20d avg`: `1.09x`
+- Volume flag: `normal`
+- Fresh `EMA_20` reclaim: `no`
+- Screen-rule pass: `no`
+- Price vs `SMA_200`: `43.3%`
+- Price vs `SMA_50`: `10.8%`
+- Price vs `EMA_20`: `5.4%`
+- Story: GLN.JO is aligned across the bigger trend and the nearer-term trend, with momentum on its side. Volume confirmation is adequate. MACD is confirming improving momentum.
+- Caution: Short-term strength can still fail if momentum rolls over quickly.
+- Strengthens if: Hold above the 20 EMA and continue separating above the 50 SMA.
+- Weakens if: Slip back under the 20 EMA and then lose the 50 SMA.
+- Position notes: n/a
+
+### SOL.JO
+
+- Review priority: `review_now`
+- Position status: `not_held`
+- Focus symbol: `no`
+- Opened on: `n/a`
+- Review score: `11.15`
+- Long-term trend: `constructive`
+- Medium trend: `positive`
+- Timing: `strong`
+- Momentum: `constructive`
+- MACD: `bearish`
+- Confirmation: `adequate`
+- `RSI_14`: `60.36`
+- `MACD`: `2039.00`
+- `MACD signal`: `2114.93`
+- `MACD histogram`: `-75.94`
+- Volume vs `20d avg`: `1.38x`
+- Volume flag: `normal`
+- Fresh `EMA_20` reclaim: `no`
+- Screen-rule pass: `no`
+- Price vs `SMA_200`: `75.0%`
+- Price vs `SMA_50`: `33.8%`
+- Price vs `EMA_20`: `4.0%`
+- Story: SOL.JO is aligned across the bigger trend and the nearer-term trend, with momentum on its side. Volume confirmation is adequate. MACD is still leaning bearish, so momentum repair is incomplete.
+- Caution: Short-term strength can still fail if momentum rolls over quickly.
+- Strengthens if: Hold above the 20 EMA and continue separating above the 50 SMA.
+- Weakens if: Slip back under the 20 EMA and then lose the 50 SMA.
+- Position notes: n/a
+
+### SUI.JO
+
+- Review priority: `review_now`
+- Position status: `not_held`
+- Focus symbol: `no`
+- Opened on: `n/a`
+- Review score: `11.15`
+- Long-term trend: `constructive`
+- Medium trend: `positive`
+- Timing: `strong`
+- Momentum: `strong`
+- MACD: `bullish`
+- Confirmation: `light`
+- `RSI_14`: `69.16`
+- `MACD`: `158.11`
+- `MACD signal`: `83.34`
+- `MACD histogram`: `74.77`
+- Volume vs `20d avg`: `0.61x`
+- Volume flag: `normal`
+- Fresh `EMA_20` reclaim: `no`
+- Screen-rule pass: `no`
+- Price vs `SMA_200`: `12.6%`
+- Price vs `SMA_50`: `12.4%`
+- Price vs `EMA_20`: `8.9%`
+- Story: SUI.JO is aligned across the bigger trend and the nearer-term trend, with momentum on its side. Volume confirmation is light. MACD is confirming improving momentum.
 - Caution: Short-term strength can still fail if momentum rolls over quickly.
 - Strengthens if: Hold above the 20 EMA and continue separating above the 50 SMA.
 - Weakens if: Slip back under the 20 EMA and then lose the 50 SMA.
@@ -211,4 +232,4 @@
 - Direct observations come from the latest indicator snapshot and derived percentage gaps to the moving averages.
 - Narrative language is an interpretation layer, not a prediction or personalized financial advice.
 - The markdown report is intentionally shortlist-first so it stays readable when the watchlist grows.
-- Future indicators such as MACD can be appended to the same report structure without changing the top-level sections.
+- MACD is included as a supporting momentum-confirmation layer without changing the shortlist-first report structure.

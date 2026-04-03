@@ -39,6 +39,9 @@ HISTORY_COLUMNS = [
     "sma_50",
     "sma_200",
     "ema_20",
+    "macd",
+    "macd_signal",
+    "macd_histogram",
     "volume",
     "rsi_14",
     "volume_avg_20",
@@ -122,6 +125,10 @@ def compute_indicators(history: pd.DataFrame) -> pd.DataFrame:
     history["sma_50"] = by_symbol["price_used"].transform(lambda series: series.rolling(window=50, min_periods=50).mean())
     history["sma_200"] = by_symbol["price_used"].transform(lambda series: series.rolling(window=200, min_periods=200).mean())
     history["ema_20"] = by_symbol["price_used"].transform(lambda series: series.ewm(span=20, adjust=False, min_periods=20).mean())
+    macd = by_symbol["price_used"].apply(compute_macd)
+    history["macd"] = macd["macd"]
+    history["macd_signal"] = macd["macd_signal"]
+    history["macd_histogram"] = macd["macd_histogram"]
     history["rsi_14"] = by_symbol["price_used"].transform(compute_rsi_14)
     history["volume_avg_20"] = by_symbol["volume"].transform(lambda series: series.rolling(window=20, min_periods=20).mean())
     history["volume_spike_ratio"] = history["volume"] / history["volume_avg_20"]
@@ -145,6 +152,25 @@ def compute_indicators(history: pd.DataFrame) -> pd.DataFrame:
     history.loc[has_screen_inputs, "screen_rule_pass"] = screen_condition.loc[has_screen_inputs].astype("boolean")
 
     return history
+
+
+def compute_macd(series: pd.Series) -> pd.DataFrame:
+    fast_ema = series.ewm(span=12, adjust=False, min_periods=12).mean()
+    slow_ema = series.ewm(span=26, adjust=False, min_periods=26).mean()
+    macd_line = fast_ema - slow_ema
+    macd_line = macd_line.where(slow_ema.notna())
+    signal_line = macd_line.ewm(span=9, adjust=False, min_periods=9).mean()
+    signal_line = signal_line.where(macd_line.notna())
+    histogram = macd_line - signal_line
+    histogram = histogram.where(signal_line.notna())
+    return pd.DataFrame(
+        {
+            "macd": macd_line,
+            "macd_signal": signal_line,
+            "macd_histogram": histogram,
+        },
+        index=series.index,
+    )
 
 
 def compute_rsi_14(series: pd.Series) -> pd.Series:
@@ -199,6 +225,9 @@ def write_history_csv(history: pd.DataFrame, output_path: Path) -> None:
                     "sma_50": format_optional_number(row["sma_50"]),
                     "sma_200": format_optional_number(row["sma_200"]),
                     "ema_20": format_optional_number(row["ema_20"]),
+                    "macd": format_optional_number(row["macd"]),
+                    "macd_signal": format_optional_number(row["macd_signal"]),
+                    "macd_histogram": format_optional_number(row["macd_histogram"]),
                     "volume": format_optional_number(row["volume"]),
                     "rsi_14": format_optional_number(row["rsi_14"]),
                     "volume_avg_20": format_optional_number(row["volume_avg_20"]),
@@ -230,6 +259,9 @@ def write_latest_snapshot(history: pd.DataFrame) -> None:
                     "sma_50": format_optional_number(row["sma_50"]),
                     "sma_200": format_optional_number(row["sma_200"]),
                     "ema_20": format_optional_number(row["ema_20"]),
+                    "macd": format_optional_number(row["macd"]),
+                    "macd_signal": format_optional_number(row["macd_signal"]),
+                    "macd_histogram": format_optional_number(row["macd_histogram"]),
                     "volume": format_optional_number(row["volume"]),
                     "rsi_14": format_optional_number(row["rsi_14"]),
                     "volume_avg_20": format_optional_number(row["volume_avg_20"]),
@@ -253,6 +285,9 @@ def write_latest_snapshot(history: pd.DataFrame) -> None:
                 "sma_50": None if pd.isna(row["sma_50"]) else float(row["sma_50"]),
                 "sma_200": None if pd.isna(row["sma_200"]) else float(row["sma_200"]),
                 "ema_20": None if pd.isna(row["ema_20"]) else float(row["ema_20"]),
+                "macd": None if pd.isna(row["macd"]) else float(row["macd"]),
+                "macd_signal": None if pd.isna(row["macd_signal"]) else float(row["macd_signal"]),
+                "macd_histogram": None if pd.isna(row["macd_histogram"]) else float(row["macd_histogram"]),
                 "volume": None if pd.isna(row["volume"]) else float(row["volume"]),
                 "rsi_14": None if pd.isna(row["rsi_14"]) else float(row["rsi_14"]),
                 "volume_avg_20": None if pd.isna(row["volume_avg_20"]) else float(row["volume_avg_20"]),

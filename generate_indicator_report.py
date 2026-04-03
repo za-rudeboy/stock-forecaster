@@ -39,6 +39,9 @@ REQUIRED_COLUMNS = {
     "sma_50",
     "sma_200",
     "ema_20",
+    "macd",
+    "macd_signal",
+    "macd_histogram",
     "volume",
     "rsi_14",
     "volume_avg_20",
@@ -47,7 +50,6 @@ REQUIRED_COLUMNS = {
     "ema_20_reclaim",
     "screen_rule_pass",
 }
-OPTIONAL_COLUMNS = ["macd", "macd_signal", "macd_histogram"]
 DETAILED_SYMBOL_LIMIT = 5
 SHORTLIST_LIMIT = 5
 
@@ -60,6 +62,9 @@ class SymbolReport:
     sma_50: float | None
     sma_200: float | None
     ema_20: float | None
+    macd: float | None
+    macd_signal: float | None
+    macd_histogram: float | None
     volume: float | None
     rsi_14: float | None
     volume_avg_20: float | None
@@ -72,6 +77,7 @@ class SymbolReport:
     medium_term: str
     timing: str
     momentum: str
+    macd_state: str
     confirmation: str
     overall_state: str
     story: str
@@ -169,12 +175,33 @@ def classify_confirmation(volume_spike: str | None, volume_spike_ratio: float | 
     return "light"
 
 
+def classify_macd(macd: float | None, macd_signal: float | None, macd_histogram: float | None) -> str:
+    if macd is None or macd_signal is None or macd_histogram is None:
+        return "insufficient_history"
+    if macd >= macd_signal and macd_histogram > 0:
+        return "bullish"
+    if macd < macd_signal and macd_histogram < 0:
+        return "bearish"
+    return "mixed"
+
+
+def macd_phrase(macd_state: str) -> str:
+    phrases = {
+        "bullish": "MACD is confirming improving momentum.",
+        "bearish": "MACD is still leaning bearish, so momentum repair is incomplete.",
+        "mixed": "MACD is mixed, so momentum confirmation is not decisive yet.",
+        "insufficient_history": "MACD is not available yet.",
+    }
+    return phrases[macd_state]
+
+
 def build_story(
     symbol: str,
     long_term: str,
     medium_term: str,
     timing: str,
     momentum: str,
+    macd_state: str,
     confirmation: str,
     screen_rule_pass: bool | None,
 ) -> tuple[str, str, str, str, str]:
@@ -182,7 +209,8 @@ def build_story(
         overall_state = "screen_pass_candidate"
         story = (
             f"{symbol} passes the current first-pass screen: it is above both long- and medium-term trend lines, "
-            "RSI is on the constructive side of 50, and price has just reclaimed the 20 EMA."
+            "RSI is on the constructive side of 50, and price has just reclaimed the 20 EMA. "
+            f"{macd_phrase(macd_state)}"
         )
         caution = "A fresh reclaim is an early timing event, so it needs follow-through rather than a one-day burst."
         strengthen_next = "Stay above the 20 EMA, keep RSI above 50, and expand above the 50 SMA."
@@ -193,7 +221,8 @@ def build_story(
         overall_state = "trend_strength"
         story = (
             f"{symbol} is aligned across the bigger trend and the nearer-term trend, with momentum on its side. "
-            f"Volume confirmation is {confirmation.replace('_', ' ')}."
+            f"Volume confirmation is {confirmation.replace('_', ' ')}. "
+            f"{macd_phrase(macd_state)}"
         )
         caution = "Short-term strength can still fail if momentum rolls over quickly."
         strengthen_next = "Hold above the 20 EMA and continue separating above the 50 SMA."
@@ -204,7 +233,8 @@ def build_story(
         overall_state = "constructive_pullback"
         story = (
             f"{symbol} still has a supportive longer-term structure, but the stock is in a pullback or repair phase rather than a clean upswing. "
-            f"Momentum is {momentum.replace('_', ' ')} and volume confirmation is {confirmation.replace('_', ' ')}."
+            f"Momentum is {momentum.replace('_', ' ')} and volume confirmation is {confirmation.replace('_', ' ')}. "
+            f"{macd_phrase(macd_state)}"
         )
         caution = "If the pullback continues and the 200 SMA breaks, the bigger-picture read worsens materially."
         strengthen_next = "Reclaim the 20 EMA first, then the 50 SMA."
@@ -215,7 +245,8 @@ def build_story(
         overall_state = "downtrend_or_damage"
         story = (
             f"{symbol} is operating below its long-term trend line, so the chart is in repair mode rather than in a healthy trend. "
-            f"Momentum is {momentum.replace('_', ' ')}."
+            f"Momentum is {momentum.replace('_', ' ')}. "
+            f"{macd_phrase(macd_state)}"
         )
         caution = "A cheap-looking price is not the same thing as a healthy setup."
         strengthen_next = "Get back above the 20 EMA, then the 50 SMA, and eventually reclaim the 200 SMA."
@@ -225,7 +256,8 @@ def build_story(
     overall_state = "mixed"
     story = (
         f"{symbol} has mixed evidence across the trend layers, so the setup is not decisive yet. "
-        f"Momentum is {momentum.replace('_', ' ')} and volume confirmation is {confirmation.replace('_', ' ')}."
+        f"Momentum is {momentum.replace('_', ' ')} and volume confirmation is {confirmation.replace('_', ' ')}. "
+        f"{macd_phrase(macd_state)}"
     )
     caution = "Mixed charts can create false starts in both directions."
     strengthen_next = "Let short-term price action start agreeing with the broader trend."
@@ -330,6 +362,9 @@ def build_symbol_report(
     sma_50 = parse_optional_float(row["sma_50"])
     sma_200 = parse_optional_float(row["sma_200"])
     ema_20 = parse_optional_float(row["ema_20"])
+    macd = parse_optional_float(row["macd"])
+    macd_signal = parse_optional_float(row["macd_signal"])
+    macd_histogram = parse_optional_float(row["macd_histogram"])
     volume = parse_optional_float(row["volume"])
     rsi_14 = parse_optional_float(row["rsi_14"])
     volume_avg_20 = parse_optional_float(row["volume_avg_20"])
@@ -342,9 +377,10 @@ def build_symbol_report(
     medium_term = classify_medium_term(price_used, sma_50, sma_200)
     timing = classify_timing(price_used, ema_20)
     momentum = classify_momentum(rsi_14)
+    macd_state = classify_macd(macd, macd_signal, macd_histogram)
     confirmation = classify_confirmation(volume_spike, volume_spike_ratio)
     overall_state, story, caution, strengthen_next, weaken_next = build_story(
-        row["symbol"], long_term, medium_term, timing, momentum, confirmation, screen_rule_pass
+        row["symbol"], long_term, medium_term, timing, momentum, macd_state, confirmation, screen_rule_pass
     )
     observed_metrics = {
         "vs_sma_50_pct": percent_gap(price_used, sma_50),
@@ -355,11 +391,12 @@ def build_symbol_report(
         long_term, medium_term, timing, momentum, confirmation, screen_rule_pass, observed_metrics
     )
 
-    optional_indicators: dict[str, float | str | None] = {}
-    for column in OPTIONAL_COLUMNS:
-        if column not in row:
-            continue
-        optional_indicators[column] = parse_optional_float(row[column])
+    optional_indicators: dict[str, float | str | None] = {
+        "macd": macd,
+        "macd_signal": macd_signal,
+        "macd_histogram": macd_histogram,
+        "macd_state": macd_state,
+    }
 
     position = positions_by_symbol.get(row["symbol"], {})
 
@@ -370,6 +407,9 @@ def build_symbol_report(
         sma_50=sma_50,
         sma_200=sma_200,
         ema_20=ema_20,
+        macd=macd,
+        macd_signal=macd_signal,
+        macd_histogram=macd_histogram,
         volume=volume,
         rsi_14=rsi_14,
         volume_avg_20=volume_avg_20,
@@ -382,6 +422,7 @@ def build_symbol_report(
         medium_term=medium_term,
         timing=timing,
         momentum=momentum,
+        macd_state=macd_state,
         confirmation=confirmation,
         overall_state=overall_state,
         story=story,
@@ -567,8 +608,12 @@ def write_markdown_report(reports: list[SymbolReport], counts: dict[str, int], s
                 f"- Medium trend: `{report.medium_term}`",
                 f"- Timing: `{report.timing}`",
                 f"- Momentum: `{report.momentum}`",
+                f"- MACD: `{report.macd_state}`",
                 f"- Confirmation: `{report.confirmation}`",
                 f"- `RSI_14`: `{'n/a' if report.rsi_14 is None else f'{report.rsi_14:.2f}'}`",
+                f"- `MACD`: `{'n/a' if report.macd is None else f'{report.macd:.2f}'}`",
+                f"- `MACD signal`: `{'n/a' if report.macd_signal is None else f'{report.macd_signal:.2f}'}`",
+                f"- `MACD histogram`: `{'n/a' if report.macd_histogram is None else f'{report.macd_histogram:.2f}'}`",
                 f"- Volume vs `20d avg`: `{'n/a' if report.volume_spike_ratio is None else f'{report.volume_spike_ratio:.2f}x'}`",
                 f"- Volume flag: `{report.volume_spike or 'n/a'}`",
                 f"- Fresh `EMA_20` reclaim: `{format_bool(report.ema_20_reclaim)}`",
@@ -592,7 +637,7 @@ def write_markdown_report(reports: list[SymbolReport], counts: dict[str, int], s
             "- Direct observations come from the latest indicator snapshot and derived percentage gaps to the moving averages.",
             "- Narrative language is an interpretation layer, not a prediction or personalized financial advice.",
             "- The markdown report is intentionally shortlist-first so it stays readable when the watchlist grows.",
-            "- Future indicators such as MACD can be appended to the same report structure without changing the top-level sections.",
+            "- MACD is included as a supporting momentum-confirmation layer without changing the shortlist-first report structure.",
             "",
         ]
     )
@@ -638,6 +683,7 @@ def write_json_report(reports: list[SymbolReport], counts: dict[str, int], summa
                 "medium_term": report.medium_term,
                 "timing": report.timing,
                 "momentum": report.momentum,
+                "macd_state": report.macd_state,
                 "confirmation": report.confirmation,
                 "overall_state": report.overall_state,
                 "rsi_14": report.rsi_14,

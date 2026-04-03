@@ -87,7 +87,7 @@ Behavior:
 
 ## Indicator Calculation
 
-Computes `SMA_50`, `SMA_200`, `EMA_20`, `RSI_14`, and volume-context fields from stored daily files without refetching market data.
+Computes `SMA_50`, `SMA_200`, `EMA_20`, `MACD`, `RSI_14`, and volume-context fields from stored daily files without refetching market data.
 
 ```bash
 python3 calculate_indicators.py
@@ -105,7 +105,7 @@ Behavior:
 - Uses `adj_close` as the primary indicator input price
 - Falls back to `close` if `adj_close` is missing
 - Leaves full-window indicators blank until enough history exists
-- Carries `volume`, `volume_avg_20`, `volume_spike_ratio`, `volume_spike`, `ema_20_reclaim`, and `screen_rule_pass` into the snapshot outputs
+- Carries `MACD`, `MACD signal`, `MACD histogram`, `volume`, `volume_avg_20`, `volume_spike_ratio`, `volume_spike`, `ema_20_reclaim`, and `screen_rule_pass` into the snapshot outputs
 - Overwrites Part 2 artifacts on each run so they stay aligned with `data/daily/`
 
 ## Indicator Report
@@ -129,7 +129,7 @@ Behavior:
 - Produces a basket summary, shortlist tables, and per-symbol reads in plain language
 - Uses the first-pass screen rule as a candidate filter:
   `price > SMA_200`, `price > SMA_50`, `RSI_14 > 50`, and fresh `EMA_20` reclaim
-- Keeps the JSON shape reusable for future `MACD` fields
+- Includes `MACD` fields in the markdown detailed reads and JSON optional indicator block
 - Does not place trades or emit buy/sell automation
 
 ## CSV Schema
@@ -144,8 +144,8 @@ date,symbol,open,high,low,close,adj_close,volume
 Indicator history rows use this schema:
 
 ```csv
-date,symbol,close,adj_close,price_used,price_basis,sma_50,sma_200,ema_20,volume,rsi_14,volume_avg_20,volume_spike_ratio,volume_spike,ema_20_reclaim,screen_rule_pass
-2026-03-25,NPN.JO,90847.00,90847.00,90847.00,adj_close,83610.42,,86881.67,1965310.00,58.14,1835021.70,1.07,normal,false,false
+date,symbol,close,adj_close,price_used,price_basis,sma_50,sma_200,ema_20,macd,macd_signal,macd_histogram,volume,rsi_14,volume_avg_20,volume_spike_ratio,volume_spike,ema_20_reclaim,screen_rule_pass
+2026-04-01,BHG.JO,61938.00,61938.00,61938.00,adj_close,58874.65,50545.54,59437.15,278.33,-3.00,281.33,479251.00,59.50,719627.40,0.67,normal,false,false
 ```
 
 ## Notes
