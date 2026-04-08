@@ -60,6 +60,29 @@ Track names you want to keep visible in the report even when they are not in the
 BHG.JO  # Recheck the fresh EMA20 reclaim follow-through over the next few sessions
 ```
 
+## Reading Price Levels
+
+When reviewing a symbol, do not look only at the close.
+
+- The `close` shows where price finished the day.
+- The `high` shows how far buyers managed to push price during the day.
+- The `low` shows how far sellers managed to push price during the day.
+
+These levels help you make cleaner decisions:
+
+- A recent `high` can act as a breakout or confirmation level.
+- A recent `low` can act as a support or warning level.
+- A close near the day's high can suggest buyers kept control into the end of the session.
+- A close far below the day's high can suggest intraday rejection.
+- A bounce from the day's low can suggest buyers defended support.
+
+Simple checklist:
+
+- Find the recent high. That is the proof level.
+- Find the nearest support such as the `EMA_20`, a recent swing low, or the `SMA_50`.
+- Decide whether you want confirmation above the high or a cleaner pullback entry near support.
+- Avoid buying in the middle when price is between support and breakout and neither side has clearly won.
+
 ## Daily Ingestion
 
 Fetches the latest completed daily candle for each configured symbol and writes or updates one dated CSV.

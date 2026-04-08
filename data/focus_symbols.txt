@@ -1,2 +1,2 @@
-BHG.JO  # Watch for constructive confirmation: volume >= 0.8x 20d avg, continued closes above EMA20 59437.15, and ideally a break above 62209.00
-SUI.JO  # Strong but extended: watch for volume >= 0.8x 20d avg, continued closes above EMA20 4423.98, and ideally a break above 4844.00
+BHG.JO  # Trend intact but confirmation incomplete: watch for holds above EMA20 60126.54 and volume improving materially, ideally toward 0.8x 20d avg or better
+SUI.JO  # Do not buy the middle: either break above 4943 with decent volume for confirmation, or pull back toward EMA20 4484.30 and hold for a cleaner entry
