@@ -33,7 +33,6 @@ VOD.JO  # Vodacom Group Limited
 SPP.JO  # The SPAR Group Limited
 SHP.JO  # Shoprite Holdings Limited
 TBS.JO  # Tiger Brands Limited
-TRU.JO  # Truworths International Limited
 MRP.JO  # Mr Price Group Limited
 OUT.JO  # OUTsurance Group Limited
 
@@ -48,3 +47,6 @@ SAP.JO  # Sappi Limited
 APN.JO  # Aspen Pharmacare Holdings Limited
 AVI.JO  # AVI Limited
 SUI.JO  # Sun International Limited
+
+# Small-cap sleeve
+ART.JO  #Argent Industrial Limited

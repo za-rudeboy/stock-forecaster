@@ -1,2 +1,2 @@
 BHG.JO  # Trend intact but confirmation incomplete: watch for holds above EMA20 60126.54 and volume improving materially, ideally toward 0.8x 20d avg or better
-SUI.JO  # Do not buy the middle: either break above 4943 with decent volume for confirmation, or pull back toward EMA20 4484.30 and hold for a cleaner entry
+PAN.JO  # Constructive but lightly confirmed: watch for continued holds above EMA20 3325.92 / SMA50 3311.40 and volume improving from 0.43x toward normal, ideally with further strength above 3570
