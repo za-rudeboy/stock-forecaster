@@ -1,2 +1,4 @@
 BHG.JO  # Trend intact but confirmation incomplete: watch for holds above EMA20 60126.54 and volume improving materially, ideally toward 0.8x 20d avg or better
-PAN.JO  # Constructive but lightly confirmed: watch for continued holds above EMA20 3325.92 / SMA50 3311.40 and volume improving from 0.43x toward normal, ideally with further strength above 3570
+PAN.JO  # Pullback/repair setup: watch for reclaim of EMA20 3397.39 and SMA50 3389.35, RSI back above 50, MACD histogram turning positive, and volume improving from 0.40x toward normal
+APN.JO  # Strongest new watch candidate: bullish trend/momentum with adequate volume; watch for holds above EMA20 13352.85 and ideally a break above 14000 with volume near or above normal
+CPI.JO  # Balanced new watch candidate: constructive trend with near-normal volume; watch for holds above EMA20 433504.52 / SMA50 438865.92 and strength above 447500
