@@ -22,9 +22,10 @@ This repository stores a simple Python-based market data pipeline for JSE symbol
 - `generate_indicator_report.py`: reusable human-readable and machine-readable indicator interpretation outputs
 - `market_data_pipeline.py`: shared parsing, normalization, merge, logging, and CSV write logic
 
-## Available Sub-Agent
+## Available Agents
 
-- `agents/trading-indicator-analyst.md`: reads `data/indicators/*` outputs and explains SMA/EMA data in plain language for an amateur investor, with forward compatibility for RSI, MACD, volume, and volume spikes
+- `agents/stock-analysis-agent.md`: primary analysis agent — reads pipeline outputs, delivers basket summary and per-symbol narrative in priority order (open positions → focus symbols → top candidates → pullbacks → avoids). Invoke after running all three pipeline scripts.
+- `agents/trading-indicator-analyst.md`: original indicator explainer — kept for reference; superseded by `stock-analysis-agent.md`
 
 ## Data Expectations
 
