@@ -187,12 +187,66 @@ def classify_macd(macd: float | None, macd_signal: float | None, macd_histogram:
 
 def macd_phrase(macd_state: str) -> str:
     phrases = {
-        "bullish": "MACD is confirming improving momentum.",
-        "bearish": "MACD is still leaning bearish, so momentum repair is incomplete.",
-        "mixed": "MACD is mixed, so momentum confirmation is not decisive yet.",
-        "insufficient_history": "MACD is not available yet.",
+        "bullish": "MACD is backing the move instead of fighting it.",
+        "bearish": "MACD is still a bit grumpy, so the move needs more proof.",
+        "mixed": "MACD is undecided, so I would treat it as background noise for now.",
+        "insufficient_history": "There is not enough MACD history yet to lean on it.",
     }
     return phrases[macd_state]
+
+
+def long_term_phrase(long_term: str) -> str:
+    phrases = {
+        "constructive": "The bigger trend is still on its side.",
+        "weak": "The bigger trend is still working against it.",
+        "insufficient_history": "There is not enough history yet to judge the bigger trend.",
+    }
+    return phrases[long_term]
+
+
+def medium_term_phrase(medium_term: str) -> str:
+    phrases = {
+        "positive": "The medium trend is helping rather than fighting.",
+        "improving": "The medium trend is trying to turn up.",
+        "pullback": "The medium trend is cooling off, but it is not broken.",
+        "negative": "The medium trend is still leaning the wrong way.",
+        "insufficient_history": "There is not enough history yet on the medium trend.",
+    }
+    return phrases[medium_term]
+
+
+def timing_phrase(timing: str, ema_20_reclaim: bool | None) -> str:
+    if ema_20_reclaim is True:
+        return "It has just reclaimed the 20 EMA, which is the kind of short-term repair that matters."
+    phrases = {
+        "strong": "Price is holding above the 20 EMA, so the short-term tone is firm.",
+        "firm": "Price is still sitting above the 20 EMA, which keeps the chart steady.",
+        "neutral_to_soft": "Price is hovering near the 20 EMA, so the short-term picture is a bit wishy-washy.",
+        "weak": "Price has slipped under the 20 EMA, so the chart is soft right now.",
+        "insufficient_history": "There is not enough EMA history yet to make timing calls.",
+    }
+    return phrases[timing]
+
+
+def momentum_phrase(momentum: str) -> str:
+    phrases = {
+        "strong": "Momentum is stretched but still alive.",
+        "constructive": "Momentum is healthy enough to keep the name in play.",
+        "neutral": "Momentum is neutral, so it needs more follow-through to matter.",
+        "weak": "Momentum is weak, which keeps a lid on the setup.",
+        "insufficient_history": "There is not enough momentum history yet to say much.",
+    }
+    return phrases[momentum]
+
+
+def confirmation_phrase(confirmation: str) -> str:
+    phrases = {
+        "high_participation": "Volume is showing up, so traders are participating.",
+        "adequate": "Volume is decent enough to keep the move honest.",
+        "light": "Volume is a bit thin, so the move still needs proof.",
+        "insufficient_history": "There is not enough volume history yet to judge participation.",
+    }
+    return phrases[confirmation]
 
 
 def build_story(
@@ -203,60 +257,71 @@ def build_story(
     momentum: str,
     macd_state: str,
     confirmation: str,
+    ema_20_reclaim: bool | None,
     screen_rule_pass: bool | None,
 ) -> tuple[str, str, str, str, str]:
+    story_parts = [
+        long_term_phrase(long_term),
+        medium_term_phrase(medium_term),
+        timing_phrase(timing, ema_20_reclaim),
+        momentum_phrase(momentum),
+        confirmation_phrase(confirmation),
+        macd_phrase(macd_state),
+    ]
+
     if screen_rule_pass:
         overall_state = "screen_pass_candidate"
         story = (
-            f"{symbol} is one of the cleaner names today. It is holding above both the long- and medium-term trend lines, "
-            "RSI is on the healthy side of 50, and price has just reclaimed the 20 EMA. "
-            f"That makes it more of a buy-watch than a back-away name right now. {macd_phrase(macd_state)}"
+            f"{symbol} is one of the cleaner names in the group. "
+            f"{story_parts[0]} {story_parts[1]} {story_parts[2]} "
+            f"That keeps it on the watchlist as a possible setup, not a blind chase. {story_parts[3]} {story_parts[4]} {story_parts[5]}"
         )
-        caution = "This is still early. If it slips back under the 20 EMA, the short-term case weakens fast."
-        strengthen_next = "Stay above the 20 EMA, keep RSI above 50, and build more space above the 50 SMA."
-        weaken_next = "Lose the 20 EMA quickly or let RSI fall back below 50."
+        caution = "It still needs follow-through. A fresh reclaim is useful, but it can fade quickly if price slips back under the short-term line."
+        strengthen_next = "Stay above the 20 EMA, keep RSI above 50, and widen the gap to the 50 SMA."
+        weaken_next = "Lose the 20 EMA or let momentum roll back under 50 RSI."
         return overall_state, story, caution, strengthen_next, weaken_next
 
     if long_term == "constructive" and medium_term in {"positive", "improving"} and timing in {"strong", "firm"} and momentum in {"strong", "constructive"}:
         overall_state = "trend_strength"
         story = (
-            f"{symbol} is holding up well. The bigger trend and the shorter-term trend are both pointing the right way, so this is a name that can stay on the buy-watch list. "
-            f"Volume confirmation is {confirmation.replace('_', ' ')}, which helps the case. {macd_phrase(macd_state)}"
+            f"{symbol} still has a healthy base. {story_parts[0]} {story_parts[1]} {story_parts[2]} "
+            f"That makes it a name to keep on the radar rather than one to rush. {story_parts[3]} {story_parts[4]} {story_parts[5]}"
         )
-        caution = "If momentum cools off, this can turn from solid to ordinary pretty quickly."
-        strengthen_next = "Hold above the 20 EMA and keep pushing away from the 50 SMA."
-        weaken_next = "Slip back under the 20 EMA and then lose the 50 SMA."
+        caution = "Strong charts can still overheat or stall. If the short-term tone softens, the story gets less interesting fast."
+        strengthen_next = "Hold above the 20 EMA and keep drifting farther above the 50 SMA."
+        weaken_next = "Lose the 20 EMA and then start closing back toward the 50 SMA."
         return overall_state, story, caution, strengthen_next, weaken_next
 
     if long_term == "constructive" and medium_term in {"pullback", "negative"}:
         overall_state = "constructive_pullback"
         story = (
-            f"{symbol} still has a decent longer-term shape, but the short-term picture is messy. This is more of a have-a-look name than a rush-in setup right now. "
-            f"Momentum is {momentum.replace('_', ' ')} and volume confirmation is {confirmation.replace('_', ' ')}. {macd_phrase(macd_state)}"
+            f"{symbol} still has a decent longer-term shape, but the short-term tape is choppy. "
+            f"{story_parts[0]} {story_parts[1]} {story_parts[2]} "
+            f"This looks more like a repair-and-watch story than a clean entry story. {story_parts[3]} {story_parts[4]} {story_parts[5]}"
         )
-        caution = "If the pullback keeps going and the 200 SMA gives way, the picture gets a lot uglier."
-        strengthen_next = "Reclaim the 20 EMA first, then the 50 SMA."
-        weaken_next = "Stay pinned under the 20 EMA and drift toward the 200 SMA."
+        caution = "If the pullback deepens, the longer-term backdrop stops helping and starts becoming baggage."
+        strengthen_next = "Reclaim the 20 EMA first, then rebuild above the 50 SMA."
+        weaken_next = "Stay stuck below the 20 EMA and drift closer to the 200 SMA."
         return overall_state, story, caution, strengthen_next, weaken_next
 
     if long_term == "weak":
         overall_state = "downtrend_or_damage"
         story = (
-            f"{symbol} is not looking great right now. It is below the long-term trend line, so this is more of a repair job than a clean setup. "
-            f"If you already hold it, this is the kind of name worth keeping an eye on for more weakness. Momentum is {momentum.replace('_', ' ')}. {macd_phrase(macd_state)}"
+            f"{symbol} is still trying to repair damage. {story_parts[0]} {story_parts[1]} {story_parts[2]} "
+            f"This is the kind of chart that needs proof, not optimism. {story_parts[3]} {story_parts[4]} {story_parts[5]}"
         )
-        caution = "Cheap is not the same as healthy."
-        strengthen_next = "Get back above the 20 EMA, then the 50 SMA, and eventually reclaim the 200 SMA."
+        caution = "Cheap is not the same as healthy, and weak trends can stay weak longer than people expect."
+        strengthen_next = "Get back above the 20 EMA, then the 50 SMA, and eventually the 200 SMA."
         weaken_next = "Keep failing under the 20 EMA or keep making lower lows under the 50 SMA."
         return overall_state, story, caution, strengthen_next, weaken_next
 
     overall_state = "mixed"
     story = (
-        f"{symbol} is sending mixed signals, so there is no clean edge yet. It is not ugly enough to ignore completely, but it is not strong enough to call a buy setup either. "
-        f"Momentum is {momentum.replace('_', ' ')} and volume confirmation is {confirmation.replace('_', ' ')}. {macd_phrase(macd_state)}"
+        f"{symbol} is sending mixed signals, so there is no clean edge yet. {story_parts[0]} {story_parts[1]} {story_parts[2]} "
+        f"It is not ugly enough to ignore, but it is not strong enough to call a clean setup either. {story_parts[3]} {story_parts[4]} {story_parts[5]}"
     )
-    caution = "Mixed charts can fake a move in either direction."
-    strengthen_next = "Let the short-term price action start agreeing with the broader trend."
+    caution = "Mixed charts can fake a move in either direction, so patience matters more than urgency here."
+    strengthen_next = "Let the short-term price action start lining up with the broader trend."
     weaken_next = "Let the weaker trend layer take control of the chart."
     return overall_state, story, caution, strengthen_next, weaken_next
 
@@ -376,7 +441,7 @@ def build_symbol_report(
     macd_state = classify_macd(macd, macd_signal, macd_histogram)
     confirmation = classify_confirmation(volume_spike, volume_spike_ratio)
     overall_state, story, caution, strengthen_next, weaken_next = build_story(
-        row["symbol"], long_term, medium_term, timing, momentum, macd_state, confirmation, screen_rule_pass
+        row["symbol"], long_term, medium_term, timing, momentum, macd_state, confirmation, ema_20_reclaim, screen_rule_pass
     )
     observed_metrics = {
         "vs_sma_50_pct": percent_gap(price_used, sma_50),
@@ -453,10 +518,10 @@ def basket_summary(reports: list[SymbolReport]) -> tuple[dict[str, int], str]:
     }
 
     narrative = (
-        f"The watchlist is mixed but not dead. {counts['above_sma_200']} of {counts['total_symbols']} symbols are still above the 200 SMA, "
+        f"The watchlist is workable, but not broad-based. {counts['above_sma_200']} of {counts['total_symbols']} symbols are still above the 200 SMA, "
         f"{counts['above_sma_50']} are above the 50 SMA, and {counts['rsi_above_50']} have RSI above 50. "
-        f"{counts['fresh_ema_20_reclaims']} have just reclaimed the 20 EMA, while {counts['screen_rule_pass']} are clean enough for the first-pass screen. "
-        "In plain English: there are a few names that look worth watching, but this is not a crowd of obvious buys."
+        f"{counts['fresh_ema_20_reclaims']} names have just climbed back above the 20 EMA, while {counts['screen_rule_pass']} are clean enough for the first-pass screen. "
+        "In plain English: the base is intact, but this is a selective market, not a broad green light."
     )
     return counts, narrative
 
